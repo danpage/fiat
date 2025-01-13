@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: 'FIAT: Firmware for Implementation Attack Targets'
+type: software
+authors:
+  - given-names: Daniel
+    family-names: Page
+    email: dan@phoo.org
+    orcid: 'https://orcid.org/0000-0002-6366-7641'
+repository-code: 'https://www.github.com/danpage/fiat'
+license: MIT

@@ -1,0 +1,15 @@
+# Copyright (C) 2024 Daniel Page <dan@phoo.org>
+#
+# Use of this source code is restricted per the MIT license, a copy of which 
+# can be found via https://opensource.org/license/mit (and which is included 
+# as LICENSE.txt within the associated archive or repository).
+
+# =============================================================================
+
+RUN wget --quiet --output-document="riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz" https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz \
+ && tar --extract --directory ${DEPS} --file ./riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz \
+ && rm --force ./riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz
+
+ENV PATH "${PATH}:${DEPS}/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14/bin"
+
+# =============================================================================

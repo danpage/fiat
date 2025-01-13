@@ -1,0 +1,114 @@
+# Copyright (C) 2024 Daniel Page <dan@phoo.org>
+#
+# Use of this source code is restricted per the MIT license, a copy of which 
+# can be found via https://opensource.org/license/mit (and which is included 
+# as LICENSE.txt within the associated archive or repository).
+
+# =============================================================================
+
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers
+INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/gloss
+
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/fe310_hal.c
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/button.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/cache.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/clock.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/cpu.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/entry.S 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/gpio.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/interrupt.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/led.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/lock.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/memory.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/pmp.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/privilege.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/shutdown.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/spi.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/switch.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/timer.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/tty.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/uart.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/time.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/trap.S 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/synchronize_harts.c
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/vector.S
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/fixed-clock.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/fixed-factor-clock.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/inline.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/riscv_clint0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/riscv_cpu.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/riscv_plic0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_ccache0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fe310-g000_hfrosc.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fe310-g000_hfxosc.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fe310-g000_lfrosc.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fe310-g000_pll.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fe310-g000_prci.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_fu540-c000_l2.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_global-external-interrupts0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_gpio0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_gpio-buttons.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_gpio-leds.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_gpio-switches.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_local-external-interrupts0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_spi0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_test0.c 
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/src/drivers/sifive_uart0.c
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/gloss/crt0.S
+ SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/freedom-metal-201908/gloss/sys_exit.c  
+
+ TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf 
+ TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.bin 
+ TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.hex
+
+GCC_PREFIX  = riscv64-unknown-elf-
+
+GCC_PATHS  += -I ${DEPS}/chipwhisperer/firmware/mcu/hal
+GCC_PATHS  += -I ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310
+GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal
+GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310
+GCC_FLAGS  += -march="rv32imac" -mabi="ilp32" -mcmodel="medlow"
+GCC_FLAGS  += -funsigned-char -funsigned-bitfields -fshort-enums -ffunction-sections -Wall -std="gnu99" -Os 
+GCC_FLAGS  += -DPLATFORM="CW308_FE310" -DHAL_TYPE="HAL_fe310" -DSS_VER="1" -DF_CPU="7372800UL"
+GCC_FLAGS  += -T ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/fe310/metal.default.lds --specs="nano.specs"
+GCC_LIBS   += -Wl,--gc-sections -lm -nostartfiles -nostdlib -lm -Wl,--start-group -lc -lgcc -Wl,--end-group
+
+# -----------------------------------------------------------------------------
+
+fetch-deps :
+	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
+	@git -C ${DEPS}/chipwhisperer checkout 1d579a1459f2cb6166813db3b835744ff1a48dc2
+	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
+
+patch-deps :
+
+build-deps :
+
+clean-deps: 
+
+# -----------------------------------------------------------------------------
+
+${REPO_HOME}/build/target/${BOARD}/%.o : %.c
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+${REPO_HOME}/build/target/${BOARD}/%.o : %.s
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+${REPO_HOME}/build/target/${BOARD}/%.o : %.S
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+
+${REPO_HOME}/build/target/${BOARD}/%.elf ${REPO_HOME}/build/target/${BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${REPO_HOME}/build/target/${BOARD}/${*}.map" -o ${REPO_HOME}/build/target/${BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${REPO_HOME}/build/target/${BOARD}/%.bin                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="binary" ${<} ${@}
+${REPO_HOME}/build/target/${BOARD}/%.hex                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="ihex"   ${<} ${@}
+
+# -----------------------------------------------------------------------------
+
+program-jlink :
+	@${REPO_HOME}/src/fiat/target/board/imp/${BOARD}/script/program-jlink.sh $(filter %.hex, ${TARGETS})
+
+# =============================================================================

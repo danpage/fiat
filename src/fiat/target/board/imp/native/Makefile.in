@@ -1,0 +1,39 @@
+# Copyright (C) 2024 Daniel Page <dan@phoo.org>
+#
+# Use of this source code is restricted per the MIT license, a copy of which 
+# can be found via https://opensource.org/license/mit (and which is included 
+# as LICENSE.txt within the associated archive or repository).
+
+# =============================================================================
+
+GCC_PREFIX  =
+
+GCC_PATHS  += 
+GCC_FLAGS  += 
+GCC_LIBS   += 
+
+ TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf
+
+# -----------------------------------------------------------------------------
+
+fetch-deps :
+
+patch-deps :
+
+build-deps :
+
+clean-deps: 
+
+# -----------------------------------------------------------------------------
+
+${REPO_HOME}/build/target/${BOARD}/%.o : %.c
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+${REPO_HOME}/build/target/${BOARD}/%.o : %.s
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+${REPO_HOME}/build/target/${BOARD}/%.o : %.S
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+
+${REPO_HOME}/build/target/${BOARD}/%.elf ${REPO_HOME}/build/target/${BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${REPO_HOME}/build/target/${BOARD}/${*}.map" -o ${REPO_HOME}/build/target/${BOARD}/${*}.elf ${^} ${GCC_LIBS}
+
+# =============================================================================

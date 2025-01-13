@@ -1,0 +1,7 @@
+clang==14.0
+hatch
+hawkmoth
+myst-parser
+pyserial
+sphinx
+sphinx-rtd-theme
