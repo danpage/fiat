@@ -1,7 +1,7 @@
 # FIAT: Firmware for Implementation Attack Targets
 
-![Read the Docs (version)](https://img.shields.io/readthedocs/:packageName/:version)
-![PyPI - Version](https://img.shields.io/pypi/v/:packageName)
+![Read the Docs (version)](https://img.shields.io/readthedocs/fiat)
+![PyPI - Version](https://img.shields.io/pypi/v/libfiat)
 
 <!--- ==================================================================== --->
 
@@ -90,7 +90,7 @@ goal is for it to
   the target transmits an ack(nowledgement) to the client,
 
 - support 
-  [target implementations]() 
+  [target implementations](https://fiat.readthedocs.io/en/latest/target.html)
   formed from 
 
   1. a kernel layer, 
@@ -101,15 +101,16 @@ goal is for it to
      which uses the board layer to provide an interface to the kernel,
 
 - support 
-  [client implementations]()
+  [client implementations](https://fiat.readthedocs.io/en/latest/client.html)
   based on
   [Python](https://www.python.org)
   via an associated,
   [PyPI](https://pypi.org)-hosted
-  library,
+  library called 
+  [`libfiat`](https://pypi.org/project/libfiat),
 
 - support a container'ised 
-  [build system]() 
+  build system
   for each board using
   [Docker](https://www.docker.com).
 
@@ -137,14 +138,14 @@ goal is for it to
 ## Usage
 
 The easiest way to get started is arguably via the
-[documentation]():
+[documentation](https://fiat.readthedocs.io):
 it includes 
 a high-level overview of the 
-[workflow]()
+[workflow](https://fiat.readthedocs.io/en/latest/workflow.html)
 involved,
 plus
 a low(er)-level 
-[example]()
+[example](https://fiat.readthedocs.io/en/latest/example.html)
 of applying said workflow to capture a 
 [block cipher](https://en.wikipedia.org/wiki/Block_cipher)
 implementation.

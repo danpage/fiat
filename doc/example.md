@@ -166,6 +166,14 @@ Now we can execute the target and client, and interaction between them:
   `${REPO_HOME}/build/target/native/target.ncat`
 
 - In terminal 2, 
+  install
+  [`libfiat`](https://pypi.org/project/libfiat)
+
+  ```sh
+  pip3 install libfiat
+  ```
+
+  then
   *either*
   execute
 
