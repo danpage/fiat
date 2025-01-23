@@ -27,8 +27,8 @@ byte  board_uart_rd() {
 
 // ----------------------------------------------------------------------------
 
-void  board_gpio_wr( gpio_t p, bool x ) {
-  if( p == GPIO_TRIGGER ) {
+void  board_gpio_wr( pin_t p, bool x ) {
+  if( p == PIN_TRIGGER ) {
     if( x ) {
       trigger_high();
     }
@@ -38,7 +38,7 @@ void  board_gpio_wr( gpio_t p, bool x ) {
   }
 }
 
-bool  board_gpio_rd( gpio_t p         ) {
+bool  board_gpio_rd( pin_t p         ) {
   return false;
 }
 

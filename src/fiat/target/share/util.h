@@ -62,8 +62,8 @@ typedef uint8_t byte;
   */
 
 typedef enum {
-  GPIO_TRIGGER
-} gpio_t;
+  PIN_TRIGGER
+} pin_t;
 
 /** shared
   */

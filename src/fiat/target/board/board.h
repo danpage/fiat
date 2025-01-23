@@ -45,7 +45,7 @@ extern byte  board_uart_rd();
   * @param x the value to write.
   */
 
-extern void  board_gpio_wr( gpio_t p, bool x );
+extern void  board_gpio_wr( pin_t p, bool x );
 
 /** Read  a value from (or sample a value from) a GPIO pin.
   *
@@ -53,7 +53,7 @@ extern void  board_gpio_wr( gpio_t p, bool x );
   * @return  the value     read.
   */
 
-extern bool  board_gpio_rd( gpio_t p         );
+extern bool  board_gpio_rd( pin_t p         );
 
 // ----------------------------------------------------------------------------
 

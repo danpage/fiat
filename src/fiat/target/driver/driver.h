@@ -17,9 +17,9 @@
 
 #define DRIVER_EXECUTE(x,y,z,...) {                \
   tsc_t tsc_0 = board_tsc_rd();                    \
-  board_gpio_wr( GPIO_TRIGGER, x );                \
+  board_gpio_wr( PIN_TRIGGER, x );                 \
   ret_t ret   = z( __VA_ARGS__ );                  \
-  board_gpio_wr( GPIO_TRIGGER, y );                \
+  board_gpio_wr( PIN_TRIGGER, y );                 \
   tsc_t tsc_1 = board_tsc_rd();                    \
                                                    \
   tsc_t tsc   = tsc_1 - tsc_0;                     \

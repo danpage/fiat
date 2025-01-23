@@ -14,11 +14,11 @@ endif
 # =============================================================================
 
 ${REPO_HOME}/build/docker/${BOARD}/Makefile      : ${REPO_HOME}/src/fiat/target/board/imp/${BOARD}/Makefile.in
-	m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
+	@m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
 ${REPO_HOME}/build/docker/${BOARD}/Dockerfile    : ${REPO_HOME}/src/docker/Dockerfile
-	m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
+	@m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
 ${REPO_HOME}/build/docker/${BOARD}/entrypoint.sh : ${REPO_HOME}/src/docker/entrypoint.sh
-	m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
+	@m4 --include="${REPO_HOME}/src/docker" --include="${REPO_HOME}/src/fiat/target/board/imp/${BOARD}" ${<} > ${@}
 
 BUILD_FILES  = ${REPO_HOME}/build/docker/${BOARD}/Makefile
 BUILD_FILES += ${REPO_HOME}/build/docker/${BOARD}/Dockerfile

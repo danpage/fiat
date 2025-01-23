@@ -55,8 +55,8 @@ INCLUDES   += $(sort $(dir         $(call include)))
  OBJECTS   += $(addprefix ${REPO_HOME}/build/target/${BOARD}/, $(notdir $(patsubst %.s, %.o, $(filter %.s, ${SOURCES}))))
  OBJECTS   += $(addprefix ${REPO_HOME}/build/target/${BOARD}/, $(notdir $(patsubst %.S, %.o, $(filter %.S, ${SOURCES}))))
 
-GCC_PATHS  +=
 GCC_FLAGS  += -DVERSION="${REPO_VERSION}" -DBOARD='"${BOARD}"' -DDRIVER='"${DRIVER}"' ${CONF}
+GCC_PATHS  +=
 GCC_LIBS   +=
 
 include ${REPO_HOME}/src/fiat/target/board/imp/${BOARD}/Makefile.in
@@ -86,15 +86,6 @@ ${CLEAN_PATHS} :
 	@rm --force --recursive ${@}
 
 # Define targets to drive build process.
-
-debug :
-	@echo "INCLUDES = ${INCLUDES}"
-	@echo "SOURCES  = ${SOURCES}"
-	@echo "OBJECTS  = ${OBJECTS}"
-	@echo "TARGETS  = ${TARGETS}"
-
-script/% :
-	@${REPO_HOME}/src/fiat/target/board/imp/${BOARD}/script/${*}
 
 build    :                      ${BUILD_PATHS} ${BUILD_FILES}
 

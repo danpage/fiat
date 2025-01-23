@@ -29,7 +29,7 @@ GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal
 GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal/stm32f0
 GCC_FLAGS  += -mcpu="cortex-m0" -mthumb -mfloat-abi="soft"
 GCC_FLAGS  += -funsigned-char -funsigned-bitfields -fshort-enums -ffunction-sections -Wall -std="gnu99" -Os 
-GCC_FLAGS  += -DPLATFORM="CW308_STM32F0" -DHAL_TYPE="HAL_stm32f0" -DSS_VER="1" -DSTM32 -DSTM32F0 -DSTM32F071xB -DSTM32F071RBTX  -DF_CPU="7372800UL"
+GCC_FLAGS  += -DPLATFORM="CW308_STM32F0" -DHAL_TYPE="HAL_stm32f0" -DSS_VER="1" -DSTM32 -DSTM32F0 -DSTM32F071xB -DSTM32F071RBTX -DF_CPU="7372800UL"
 GCC_FLAGS  += -T ${DEPS}/chipwhisperer/firmware/mcu/hal/stm32f0/LinkerScript.ld --specs="nano.specs" --specs="nosys.specs" 
 GCC_LIBS   += -lm 
 
