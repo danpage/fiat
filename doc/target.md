@@ -84,15 +84,17 @@ environment variable specifies the
 [board  type](#target-board).
 The options are
 
-| `BOARD`                | Class      | Family                          | Core                                                    | Model                                                                          | ISA      | Host                                                                              |
-|:-----------------------|:-----------|:--------------------------------|:--------------------------------------------------------|:-------------------------------------------------------------------------------|:---------|:----------------------------------------------------------------------------------|
-| `native`               | Simulation |                                 |                                                         |                                                                                |          |                                                                                   |
-| `cw308/stm32f071rbt6`  | ASIC       |    [ARM](https://www.arm.com)   | [Cortex-M0](https://en.wikipedia.org/wiki/ARM_Cortex-M) | [STM32F071RBT6](https://www.st.com/resource/en/datasheet/stm32f071cb.pdf)      | ARMv6-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
-| `cw308/stm32f100rbt6b` | ASIC       |    [ARM](https://www.arm.com)   | [Cortex-M3](https://en.wikipedia.org/wiki/ARM_Cortex-M) | [STM32F100RBT6B](https://www.st.com/resource/en/datasheet/stm32f100cb.pdf)     | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
-| `cw308/stm32f215ret6`  | ASIC       |    [ARM](https://www.arm.com)   | [Cortex-M3](https://en.wikipedia.org/wiki/ARM_Cortex-M) | [STM32F215RET6](https://www.st.com/resource/en/datasheet/stm32f215re.pdf)      | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
-| `cw308/stm32f303rct7`  | ASIC       |    [ARM](https://www.arm.com)   | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M) | [STM32F303RCT7](https://www.st.com/resource/en/datasheet/stm32f303rc.pdf)      | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
-| `cw308/stm32f405rgt6`  | ASIC       |    [ARM](https://www.arm.com)   | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M) | [STM32F405RGT5](https://www.st.com/resource/en/datasheet/stm32f405rg.pdf)      | ARMv7E-M | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
-| `cw308/fe310-g002`     | ASIC       | [RISC-V](https://www.riscv.org) |  E31                                                    | [FE310-G002](https://www.sifive.com/document-file/freedom-e310-g002-datasheet) | RV32IMAC | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F) |
+| `BOARD`                | Class      | Vendor                                          | Core                                                          | Model                                                                          | ISA      | Host                                                                                  |
+|:-----------------------|:-----------|:------------------------------------------------|:--------------------------------------------------------------|:-------------------------------------------------------------------------------|:---------|:--------------------------------------------------------------------------------------|
+| `native`               | Simulation |                                                 |                                                               |                                                                                |          |                                                                                       |
+| `cw308/atmega328p`     | ASIC       |          [Microchip](https://www.microchip.com) | [ATmega](https://en.wikipedia.org/wiki/AVR_microcontrollers)  | [ATMEGA328P](https://www.microchip.com/en-us/product/atmega328p)               | AVR      | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-AVR)        |
+| `cw308/atxmega128d4`   | ASIC       |          [Microchip](https://www.microchip.com) | [ATxmega](https://en.wikipedia.org/wiki/AVR_microcontrollers) | [ATXMEGA128D4](https://www.microchip.com/en-us/product/atxmega128d4)           | AVR      | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-XMEGA)      |
+| `cw308/stm32f071rbt6`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M0](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F071RBT6](https://www.st.com/resource/en/datasheet/stm32f071cb.pdf)      | ARMv6-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
+| `cw308/stm32f100rbt6b` | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M3](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F100RBT6B](https://www.st.com/resource/en/datasheet/stm32f100cb.pdf)     | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
+| `cw308/stm32f215ret6`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M3](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F215RET6](https://www.st.com/resource/en/datasheet/stm32f215re.pdf)      | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
+| `cw308/stm32f303rct7`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F303RCT7](https://www.st.com/resource/en/datasheet/stm32f303rc.pdf)      | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
+| `cw308/stm32f405rgt6`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F405RGT5](https://www.st.com/resource/en/datasheet/stm32f405rg.pdf)      | ARMv7E-M | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
+| `cw308/fe310-g002`     | ASIC       |             [SiFive](https://www.sifive.com)    |  E31                                                          | [FE310-G002](https://www.sifive.com/document-file/freedom-e310-g002-datasheet) | RV32IMAC | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-FE310-G002) |
 
 <!--- -------------------------------------------------------------------- --->
 
@@ -523,15 +525,15 @@ it is potentially as simple as a shim layer over a platform-specific HAL.
 ## Shared
 
 ```{eval-rst}
-.. c:autoenum::  req_t
+.. c:autoenum:: req_t
   :file: target/share/util.h
-.. c:autoenum::  ack_t
+.. c:autoenum:: ack_t
   :file: target/share/util.h
-.. c:autoenum:: gpio_t
+.. c:autoenum:: pin_t
   :file: target/share/util.h
-.. c:autotype::  ret_t
+.. c:autotype:: ret_t
   :file: target/share/util.h
-.. c:autotype::  tsc_t
+.. c:autotype:: tsc_t
   :file: target/share/util.h
 ```
 
