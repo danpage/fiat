@@ -26,9 +26,9 @@ if ( __name__ == '__main__' ) :
   argv = parser.parse_args() ; random.seed( int( argv.seed ) )
 
   if   ( argv.device == 'serial' ) :
-    client = libfiat.client.ClientSerial( driver = argv.driver ) ; client.open(               ( argv.port ), baudrate = argv.baud )
+    client = libfiat.client.ClientImpSerial( driver = argv.driver ) ; client.open(               ( argv.port ), baudrate = argv.baud )
   elif ( argv.device == 'socket' ) :
-    client = libfiat.client.ClientSocket( driver = argv.driver ) ; client.open( argv.host, int( argv.port ),                      )
+    client = libfiat.client.ClientImpSocket( driver = argv.driver ) ; client.open( argv.host, int( argv.port ),                      )
 
   ( ack,   ) = client.reset()
 

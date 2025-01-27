@@ -11,7 +11,7 @@ from libfiat import util
 
 # =============================================================================
 
-class Client( object ) :
+class ClientAbs( abc.ABC ) :
   """ A class
       that captures
       generic 
@@ -99,7 +99,7 @@ class Client( object ) :
 
 # -----------------------------------------------------------------------------
 
-class ClientSocket( Client ) :
+class ClientImpSocket( ClientAbs ) :
   """ A (sub-)class
       that captures
       socket-based (e.g., via network, or loopback connection)
@@ -129,7 +129,7 @@ class ClientSocket( Client ) :
 
 # -----------------------------------------------------------------------------
 
-class ClientSerial( Client ) :
+class ClientImpSerial( ClientAbs ) :
   """ A (sub-)class
       that captures
       serial-based (i.e., via UART) 

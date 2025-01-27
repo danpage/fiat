@@ -17,6 +17,7 @@
 
    workflow
    example
+   build
    target
    client
 ```

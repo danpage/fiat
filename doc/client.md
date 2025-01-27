@@ -8,13 +8,13 @@
 .. autoclass:: libfiat.util.Type
 .. autoclass:: libfiat.util.Index
 
-.. autoclass:: libfiat.driver.Driver
-.. autoclass:: libfiat.driver.DriverBinary
-.. autoclass:: libfiat.driver.DriverText
+.. autoclass:: libfiat.driver.DriverAbs
+.. autoclass:: libfiat.driver.DriverImpBinary
+.. autoclass:: libfiat.driver.DriverImpText
 
-.. autoclass:: libfiat.client.Client
-.. autoclass:: libfiat.client.ClientSocket
-.. autoclass:: libfiat.client.ClientSerial
+.. autoclass:: libfiat.client.ClientAbs
+.. autoclass:: libfiat.client.ClientImpSocket
+.. autoclass:: libfiat.client.ClientImpSerial
 ```
 
 <!--- ==================================================================== --->

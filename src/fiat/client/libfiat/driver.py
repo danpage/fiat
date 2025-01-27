@@ -11,13 +11,13 @@ from libfiat import util
 
 # =============================================================================
 
-class Driver( object ) :
+class DriverAbs( abc.ABC ) :
   def __init__( self, device = None ) :
     self.device = device
 
 # -----------------------------------------------------------------------------
 
-class DriverImpBinary( Driver ) :
+class DriverImpBinary( DriverAbs ) :
   def __init__( self, device = None ) :
     super().__init__( device = device )
 
@@ -190,7 +190,7 @@ class DriverImpBinary( Driver ) :
 
 # -----------------------------------------------------------------------------
 
-class DriverImpText( Driver ) :
+class DriverImpText( DriverAbs ) :
   def __init__( self, device = None ) :
     super().__init__( device = device )
 
