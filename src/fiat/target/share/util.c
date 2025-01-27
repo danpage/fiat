@@ -48,4 +48,15 @@ char inttohex( int  x ) {
   return '?';
 }
 
+char* strext( char* r, char* x ) {
+  while( true ) {
+    if ( *x == '\x00' ) {
+      *r   = *x++; return r;
+    }
+    else {
+      *r++ = *x++;  
+    }
+  }
+}
+
 // ============================================================================

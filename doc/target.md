@@ -95,6 +95,7 @@ The options are
 | `cw308/stm32f303rct7`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F303RCT7](https://www.st.com/resource/en/datasheet/stm32f303rc.pdf)      | ARMv7-M  | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
 | `cw308/stm32f405rgt6`  | ASIC       | [STMicroelectronics](https://www.st.com)        | [Cortex-M4](https://en.wikipedia.org/wiki/ARM_Cortex-M)       | [STM32F405RGT5](https://www.st.com/resource/en/datasheet/stm32f405rg.pdf)      | ARMv7E-M | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-STM32F)     |
 | `cw308/fe310-g002`     | ASIC       |             [SiFive](https://www.sifive.com)    |  E31                                                          | [FE310-G002](https://www.sifive.com/document-file/freedom-e310-g002-datasheet) | RV32IMAC | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-FE310-G002) |
+| `cw305/ibex`           | FPGA       |            [lowRISC](https://www.lowrisc.org)   | [Ibex](https://github.com/lowRISC/ibex)                       |                                                                                | RV32IMC  | [ChipWhisperer CW305](https://rtfm.newae.com/Targets/CW305%20Artix%20FPGA)            |
 
 <!--- -------------------------------------------------------------------- --->
 
@@ -177,13 +178,11 @@ noting that:
 - The standard SPRs defined are as follows:
 
   - index `0x80 = 128`, i.e., SPR address `0x00 = 0`
-    is called  `id`: this is an RO register used for an identifier,
-  - index `0x80 = 129`, i.e., SPR address `0x00 = 1`
-    is called `ret`: this is an RO register used for a  return code,
-  - index `0x81 = 130`, i.e., SPR address `0x01 = 2`
-    is called `tsc`: this is an RO register used for a  time-stamp counter,
-  - index `0x82 = 131`, i.e., SPR address `0x02 = 3`
-    is called `rnd`: this is an WO register used for    externally supplied randomness.
+    is called `ret`: this is an RO register used for a return code,
+  - index `0x81 = 129`, i.e., SPR address `0x01 = 1`
+    is called `tsc`: this is an RO register used for a time-stamp counter,
+  - index `0x82 = 130`, i.e., SPR address `0x02 = 2`
+    is called `rnd`: this is an WO register used for   externally supplied randomness.
 
 ### API
 
@@ -322,66 +321,78 @@ sequence of raw bytes.
 Based on this, the following command set is supported:
 
 - Ping.
-  - `req` syntax: `<byte:req>=0x00`
+  - `req` syntax: `<byte:req>='!'`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
 
 - Reset.
-  - `req` syntax: `<byte:req>=0x01`
+  - `req` syntax: `<byte:req>='*'`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
+
+- Query version.
+  - `req` syntax: `<byte:req>='$'`
+  - `ack` syntax: 
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'` || <byte:patch> || <byte:minor> || <byte:major>`
+
+- Query     identifier, or "`nameof`" a register.
+  - `req` syntax: `<byte:req>='"' || <byte:index>`
+  - `ack` syntax: 
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+' || <vint:size> || [byte:data]^size`
 
 - Query allocated size, or "`sizeof`" a register (measured in bytes).
-  - `req` syntax: `<byte:req>=0x02 || <byte:index>`
+  - `req` syntax: `<byte:req>='|' || <byte:index>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00 || <vint:size>`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+' || <vint:size>`
 
 - Query used      size, or "`usedof`" a register (measured in bytes).
-  - `req` syntax: `<byte:req>=0x03 || <byte:index>`
+  - `req` syntax: `<byte:req>='#' || <byte:index>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00 || <vint:size>`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+' || <vint:size>`
 
 - Query           type, or "`typeof`" a register.
-  - `req` syntax: `<byte:req>=0x04 || <byte:index>`
+  - `req` syntax: `<byte:req>='?' || <byte:index>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00 || <byte:type>`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+' || <byte:type>`
 
-- Write content into a register.
-  - `req` syntax: `<byte:req>=0x05 || <byte:index> || <vint:size> || [byte:data]^size`
+- Transfer content (i.e., write) into a register.
+  - `req` syntax: `<byte:req>='>' || <byte:index> || <vint:size> || [byte:data]^size`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
 
-- Read  content from a register.
-  - `req` syntax: `<byte:req>=0x06 || <byte:index>`
+- Transfer content (i.e.,  read) from a register.
+  - `req` syntax: `<byte:req>='<' || <byte:index>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00 || <vint:size> || [byte:data]^size`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+' || <vint:size> || [byte:data]^size`
 
 - Execute the kernel.
-  - `req` syntax: `<byte:req>=0x07 || <byte:op> || <vint:rep>`
+  - `req` syntax: `<byte:req>='=' || <byte:op> || <vint:rep>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
   - note: `op` is an operation identifier passed to the implementation, and `rep` is a repeat count
 
 - Execute the kernel prologue (or "major" initialisation).
-  - `req` syntax: `<byte:req>=0x08 || <byte:op>`
+  - `req` syntax: `<byte:req>='[' || <byte:op>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
   - note: `op` is an operation identifier passed to the implementation
 
 - Execute the kernel epilogue (or "major"   finalisation).
-  - `req` syntax: `<byte:req>=0x09 || <byte:op>`
+  - `req` syntax: `<byte:req>=']' || <byte:op>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>=0x01` 
-    - on success, `<byte:ack>=0x00`
+    - on failure, `<byte:ack>='-'` 
+    - on success, `<byte:ack>='+'`
   - note: `op` is an operation identifier passed to the implementation
 
 ### The `text`   driver
@@ -415,6 +426,18 @@ Based on this, the following command set is supported:
     - on failure, `<char:ack>='-'`
     - on success, `<char:ack>='+'`
 
+- Query version.
+  - `req` syntax: `<char:req>='$'`
+  - `ack` syntax: 
+    - on failure, `<char:ack>='-'`
+    - on success, `<char:ack>='+' <byte:patch> <byte:minor> <byte:major>`
+
+- Query     identifier, or "`nameof`" a register.
+  - `req` syntax: `<char:req>='"' <byte:index>`
+  - `ack` syntax:
+    - on failure, `<char:ack>='-'`
+    - on success, `<char:ack>='+' <vint:size> [byte:data]^size`
+
 - Query allocated size, or "`sizeof`" a register (measured in bytes).
   - `req` syntax: `<char:req>='|' <byte:index>`
   - `ack` syntax:
@@ -433,13 +456,13 @@ Based on this, the following command set is supported:
     - on failure, `<char:ack>='-'`
     - on success, `<char:ack>='+' <byte:type>`
 
-- Write content into a register.
+- Transfer content (i.e., write) into a register.
   - `req` syntax: `<char:req>='>' <byte:index> <vint:size> [byte:data]^size`
   - `ack` syntax:
     - on failure, `<char:ack>='-'`
     - on success, `<char:ack>='+'`
 
-- Read content from a register.
+- Transfer content (i.e.,  read) from a register.
   - `req` syntax: `<char:req>='<' <byte:index>`
   - `ack` syntax:
     - on failure, `<char:ack>='-'`

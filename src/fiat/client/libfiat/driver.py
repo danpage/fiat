@@ -17,7 +17,7 @@ class Driver( object ) :
 
 # -----------------------------------------------------------------------------
 
-class DriverBinary( Driver ) :
+class DriverImpBinary( Driver ) :
   def __init__( self, device = None ) :
     super().__init__( device = device )
 
@@ -68,9 +68,9 @@ class DriverBinary( Driver ) :
   def  _data_rd( self    ) :
     size = self._vint_rd() ; return self.device.read( size )
   
-  def ping ( self ) :
+  def ping( self ) :
     # ->
-    self._req_wr( util.Req.PING  )
+    self._req_wr( int( util.Req.PING ) )
     # --
     self._flush()
     # <-
@@ -80,7 +80,7 @@ class DriverBinary( Driver ) :
 
   def reset( self ) :
     # ->
-    self._req_wr( util.Req.RESET )
+    self._req_wr( int( util.Req.RESET ) )
     # --
     self._flush()
     # <-
@@ -88,9 +88,29 @@ class DriverBinary( Driver ) :
     # ==
     return ( ack, )
 
+  def version( self ) :
+    # ->
+    self._req_wr( int( util.Req.VERSION ) )
+    # --
+    self._flush()
+    # <-
+    ack = self._ack_rd() ; patch = self._byte_rd() ; minor = self._byte_rd() ; major = self._byte_rd()
+    # ==
+    return ( ack, patch, minor, major )
+
+  def nameof( self, index ) :
+    # ->
+    self._req_wr( int( util.Req.NAMEOF ) ) ; self._byte_wr( index )
+    # --
+    self._flush()
+    # <-
+    ack = self._ack_rd() ; name = self._data_rd().decode()
+    # ==
+    return ( ack, name )
+
   def sizeof( self, index ) :
     # ->
-    self._req_wr( util.Req.SIZEOF ) ; self._byte_wr( index )
+    self._req_wr( int( util.Req.SIZEOF ) ) ; self._byte_wr( index )
     # --
     self._flush()
     # <-
@@ -100,7 +120,7 @@ class DriverBinary( Driver ) :
 
   def usedof( self, index ) :
     # ->
-    self._req_wr( util.Req.USEDOF ) ; self._byte_wr( index )
+    self._req_wr( int( util.Req.USEDOF ) ) ; self._byte_wr( index )
     # --
     self._flush()
     # <-
@@ -110,7 +130,7 @@ class DriverBinary( Driver ) :
 
   def typeof( self, index ) :
     # ->
-    self._req_wr( util.Req.TYPEOF ) ; self._byte_wr( index )
+    self._req_wr( int( util.Req.TYPEOF ) ) ; self._byte_wr( index )
     # --
     self._flush()
     # <-
@@ -120,7 +140,7 @@ class DriverBinary( Driver ) :
 
   def wr( self, index, data ) :
     # ->
-    self._req_wr( util.Req.WR ) ; self._byte_wr( index ) ; self._data_wr( data )
+    self._req_wr( int( util.Req.WR ) ) ; self._byte_wr( index ) ; self._data_wr( data )
     # --
     self._flush()
     # <-
@@ -130,7 +150,7 @@ class DriverBinary( Driver ) :
 
   def rd( self, index       ) :
     # ->
-    self._req_wr( util.Req.RD ) ; self._byte_wr( index )
+    self._req_wr( int( util.Req.RD ) ) ; self._byte_wr( index )
     # --
     self._flush()
     # <-
@@ -140,7 +160,7 @@ class DriverBinary( Driver ) :
 
   def kernel         ( self, op, rep ) :
     # ->
-    self._req_wr( util.Req.KERNEL          ) ; self._byte_wr( op ) ; self._vint_wr( rep )
+    self._req_wr( int( util.Req.KERNEL          ) ) ; self._byte_wr( op ) ; self._vint_wr( rep )
     # --
     self._flush()
     # <-
@@ -150,7 +170,7 @@ class DriverBinary( Driver ) :
 
   def kernel_prologue( self, op      ) :
     # ->
-    self._req_wr( util.Req.KERNEL_PROLOGUE ) ; self._byte_wr( op )
+    self._req_wr( int( util.Req.KERNEL_PROLOGUE ) ) ; self._byte_wr( op )
     # --
     self._flush()
     # <-
@@ -160,7 +180,7 @@ class DriverBinary( Driver ) :
 
   def kernel_epilogue( self, op      ) :
     # ->
-    self._req_wr( util.Req.KERNEL_EPILOGUE ) ; self._byte_wr( op )
+    self._req_wr( int( util.Req.KERNEL_EPILOGUE ) ) ; self._byte_wr( op )
     # --
     self._flush()
     # <-
@@ -170,7 +190,7 @@ class DriverBinary( Driver ) :
 
 # -----------------------------------------------------------------------------
 
-class DriverText  ( Driver ) :
+class DriverImpText( Driver ) :
   def __init__( self, device = None ) :
     super().__init__( device = device )
 
@@ -255,9 +275,9 @@ class DriverText  ( Driver ) :
 
     return ( ack, tok )
 
-  def ping ( self ) :
+  def ping( self ) :
     # ->
-    self._line_wr( '!' )
+    self._line_wr( chr( util.Req.PING ) )
     # --
     self._flush()
     # <-
@@ -267,7 +287,7 @@ class DriverText  ( Driver ) :
 
   def reset( self ) :
     # ->
-    self._line_wr( '*' )
+    self._line_wr( chr( util.Req.RESET ) )
     # --
     self._flush()
     # <-
@@ -275,9 +295,29 @@ class DriverText  ( Driver ) :
     # ==
     return ( ack, )
 
+  def version( self ) :
+    # ->
+    self._line_wr( chr( util.Req.VERSION ) )
+    # --
+    self._flush()
+    # <-
+    ( ack, tok ) = self._decode( self._line_rd() ) ; patch = int( self._byte_rd( tok[ 0 ] ) ) ; minor = int( self._byte_rd( tok[ 1 ] ) ) ; major = int( self._byte_rd( tok[ 2 ] ) )
+    # ==
+    return ( ack, patch, minor, major )
+
+  def nameof( self, index ) :
+    # ->
+    self._line_wr( chr( util.Req.NAMEOF ) + ' ' + self._byte_wr( index ) )
+    # --
+    self._flush()
+    # <-
+    ( ack, tok ) = self._decode( self._line_rd() ) ; size = self._vint_rd( tok[ 0 ] ) ; name = self._data_rd( tok[ 1 ] ).decode()
+    # ==
+    return ( ack, name )
+
   def sizeof( self, index ) :
     # ->
-    self._line_wr( '|' + ' ' + self._byte_wr( index ) )
+    self._line_wr( chr( util.Req.SIZEOF ) + ' ' + self._byte_wr( index ) )
     # --
     self._flush()
     # <-
@@ -287,7 +327,7 @@ class DriverText  ( Driver ) :
 
   def usedof( self, index ) :
     # ->
-    self._line_wr( '#' + ' ' + self._byte_wr( index ) )
+    self._line_wr( chr( util.Req.USEDOF ) + ' ' + self._byte_wr( index ) )
     # --
     self._flush()
     # <-
@@ -297,7 +337,7 @@ class DriverText  ( Driver ) :
 
   def typeof( self, index ) :
     # ->
-    self._line_wr( '?' + ' ' + self._byte_wr( index ) )
+    self._line_wr( chr( util.Req.TYPEOF ) + ' ' + self._byte_wr( index ) )
     # --
     self._flush()
     # <-
@@ -307,7 +347,7 @@ class DriverText  ( Driver ) :
 
   def wr( self, index, data ) :
     # ->
-    self._line_wr( '>' + ' ' + self._byte_wr( index ) + ' ' + self._vint_wr( len( data ) ) + ' ' + self._data_wr( data ) )
+    self._line_wr( chr( util.Req.WR ) + ' ' + self._byte_wr( index ) + ' ' + self._vint_wr( len( data ) ) + ' ' + self._data_wr( data ) )
     # --
     self._flush()
     # <-
@@ -317,7 +357,7 @@ class DriverText  ( Driver ) :
 
   def rd( self, index       ) :
     # ->
-    self._line_wr( '<' + ' ' + self._byte_wr( index ) )
+    self._line_wr( chr( util.Req.RD ) + ' ' + self._byte_wr( index ) )
     # --
     self._flush()
     # <-
@@ -327,7 +367,7 @@ class DriverText  ( Driver ) :
 
   def kernel         ( self, op, rep ) :
     # ->
-    self._line_wr( '=' + ' ' + self._byte_wr( op ) + ' ' + self._vint_wr( rep ) )
+    self._line_wr( chr( util.Req.KERNEL          ) + ' ' + self._byte_wr( op ) + ' ' + self._vint_wr( rep ) )
     # --
     self._flush()
     # <-
@@ -337,7 +377,7 @@ class DriverText  ( Driver ) :
 
   def kernel_prologue( self, op      ) :
     # ->
-    self._line_wr( '[' + ' ' + self._byte_wr( op ) )
+    self._line_wr( chr( util.Req.KERNEL_PROLOGUE ) + ' ' + self._byte_wr( op ) )
     # --
     self._flush()
     # <-
@@ -347,7 +387,7 @@ class DriverText  ( Driver ) :
 
   def kernel_epilogue( self, op      ) :
     # ->
-    self._line_wr( ']' + ' ' + self._byte_wr( op ) )
+    self._line_wr( chr( util.Req.KERNEL_EPILOGUE ) + ' ' + self._byte_wr( op ) )
     # --
     self._flush()
     # <-

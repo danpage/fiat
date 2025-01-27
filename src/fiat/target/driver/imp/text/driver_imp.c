@@ -47,21 +47,23 @@ char* driver_line_wr( char* x ) {
 
 // ----------------------------------------------------------------------------
 
-void driver_byte_wr( char* r, byte x ) {
+char* driver_byte_wr( char* r, byte x ) {
   *r++ = inttohex( ( x >> 4 ) & 0xF );
   *r++ = inttohex( ( x >> 0 ) & 0xF );
 
-  *r++ = '\x00';
+  *r   = '\x00';
+
+  return r;
 }
 
-byte driver_byte_rd( char* x ) {
+byte  driver_byte_rd( char* x ) {
   byte r  = ( byte )( hextoint( *x++ ) & 0xF ) << 4;
        r |= ( byte )( hextoint( *x++ ) & 0xF ) << 0;
 
   return r;
 }
 
-void driver_vint_wr( char* r, int  x ) {
+char* driver_vint_wr( char* r, int  x ) {
   while( true ) {
     byte t = x & 0x7F; x >>= 7;
 
@@ -73,10 +75,12 @@ void driver_vint_wr( char* r, int  x ) {
     }
   }
 
-  *r++ = '\x00';
+  *r   = '\x00'; 
+
+  return r;
 }
 
-int  driver_vint_rd( char* x ) {
+int   driver_vint_rd( char* x ) {
   int r = 0, n = 0;
 
   while( true ) {
@@ -92,119 +96,169 @@ int  driver_vint_rd( char* x ) {
 
 // ----------------------------------------------------------------------------
 
-DRIVER_CMD(driver_cmd_ping,  {
+DRIVER_CMD(driver_cmd_ping, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 1 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
-  strcpy( ctx->ack, "+" );
+    p = strext( p, "+" );
 });
 
 DRIVER_CMD(driver_cmd_reset, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 1 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   driver_do_reset();
 
-  strcpy( ctx->ack, "+" );
+    p = strext( p, "+" );
+});
+
+DRIVER_CMD(driver_cmd_version, {
+  char* p = ctx->ack;
+
+  if( ctx->tok_len != 1 ) {
+    p = strext( p, "-" ); return;
+  }
+
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_byte_wr( p, VERSION_PATCH );
+    p = strext( p, " " );
+    p = driver_byte_wr( p, VERSION_MINOR );
+    p = strext( p, " " );
+    p = driver_byte_wr( p, VERSION_MAJOR );
+});
+
+DRIVER_CMD(driver_cmd_nameof, {
+  char* p = ctx->ack;
+
+  if( ctx->tok_len != 2 ) {
+    p = strext( p, "-" ); return;
+  }
+
+  kernel_reg_t* spec = NULL;
+
+  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
+    p = strext( p, "-" ); return;
+  }
+
+  int size = strlen( spec->ident );
+
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_vint_wr( p, size             );
+    p = strext( p, " " );
+
+  for( int i = 0; i < size; i++ ) {
+    p = driver_byte_wr( p, spec->ident[ i ] );
+  }
 });
 
 DRIVER_CMD(driver_cmd_sizeof, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
-  strcpy( ctx->ack, "+" ); 
-  strcat( ctx->ack, " " ); char* p = ctx->ack + strlen( ctx->ack );
-
-  driver_vint_wr( p, spec->size       );
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_vint_wr( p, spec->size       );
 });
 
 DRIVER_CMD(driver_cmd_usedof, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
-  strcpy( ctx->ack, "+" ); 
-  strcat( ctx->ack, " " ); char* p = ctx->ack + strlen( ctx->ack );
-
-  driver_vint_wr( p, spec->used       );
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_vint_wr( p, spec->used       );
 });
 
 DRIVER_CMD(driver_cmd_typeof, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
-  strcpy( ctx->ack, "+" ); 
-  strcat( ctx->ack, " " ); char* p = ctx->ack + strlen( ctx->ack );
-
-  driver_vint_wr( p, spec->type.flags );
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_vint_wr( p, spec->type.flags );
 });
 
 DRIVER_CMD(driver_cmd_wr, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 4 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
   if( !spec->type.wr ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   int size = driver_byte_rd( ctx->tok_ptr[ 2 ] );
 
   if( ( spec->type.length == KERNEL_REG_LENGTH_FIX ) && ( size != spec->size ) ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
   if(                                                   ( size >  spec->size ) ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
-
-  char* p = ctx->tok_ptr[ 3 ];
 
   for( int i = 0; i < size; i++ ) {
-    spec->data[ i ] = driver_byte_rd( p + ( i << 1 ) );
+    spec->data[ i ] = driver_byte_rd( ctx->tok_ptr[ 3 ] + ( i << 1 ) );
   }
 
-  strcpy( ctx->ack, "+" ); 
+    p = strext( p, "+" );
 });
 
 DRIVER_CMD(driver_cmd_rd, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
   if( !spec->type.rd ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   int size;
@@ -216,52 +270,56 @@ DRIVER_CMD(driver_cmd_rd, {
     size = spec->used;
   }
 
-  strcpy( ctx->ack, "+" ); 
-  strcat( ctx->ack, " " ); char* p = ctx->ack + strlen( ctx->ack );
-
-  driver_vint_wr( p, size );
-
-  strcat( ctx->ack, " " );       p = ctx->ack + strlen( ctx->ack );
+    p = strext( p, "+" );
+    p = strext( p, " " );
+    p = driver_vint_wr( p, size             );
+    p = strext( p, " " );
 
   for( int i = 0; i < size; i++ ) {
-    driver_byte_wr( p + ( i << 1 ), spec->data[ i ] );
+    p = driver_byte_wr( p, spec->data[ i ]  );
   }
 });
 
-DRIVER_CMD(driver_cmd_kernel,          {
+DRIVER_CMD(driver_cmd_kernel, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 3 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   int op = driver_byte_rd( ctx->tok_ptr[ 1 ] ), rep = driver_vint_rd( ctx->tok_ptr[ 2 ] );
 
   driver_do_kernel( op, rep );
 
-  strcpy( ctx->ack, "+" );
+    p = strext( p, "+" );
 });
 
 DRIVER_CMD(driver_cmd_kernel_prologue, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   int op = driver_byte_rd( ctx->tok_ptr[ 1 ] );
 
   driver_do_kernel_prologue( op );
 
-  strcpy( ctx->ack, "+" );
+    p = strext( p, "+" );
 });
 
 DRIVER_CMD(driver_cmd_kernel_epilogue, {
+  char* p = ctx->ack;
+
   if( ctx->tok_len != 2 ) {
-    strcpy( ctx->ack, "-" ); return;
+    p = strext( p, "-" ); return;
   }
 
   int op = driver_byte_rd( ctx->tok_ptr[ 1 ] );
 
   driver_do_kernel_epilogue( op );
 
-  strcpy( ctx->ack, "+" );
+    p = strext( p, "+" );
 });
 
 // ----------------------------------------------------------------------------
@@ -297,7 +355,7 @@ void driver_interact() {
     switch( driver_ctx.tok_ptr[ 0 ][ 0 ] ) {
       #define DECLARE_SPR(x,y,z,...)
       #define DECLARE_GPR(x,y,z,...)
-      #define DECLARE_CMD(x,y,z    ) case x: { z( &driver_ctx ); f = true; break; }
+      #define DECLARE_CMD(x,y      ) case x: { y( &driver_ctx ); f = true; break; }
       #define INCLUDE(x) 
       #include "kernel.conf"
       #undef  DECLARE_SPR
@@ -308,7 +366,7 @@ void driver_interact() {
   }
 
   if( !f ) {
-    strcpy( driver_ctx.ack, "-" );
+    strext( driver_ctx.ack, "-" );
   }
 
   driver_line_wr( driver_ctx.ack );

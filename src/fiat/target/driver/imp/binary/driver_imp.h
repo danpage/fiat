@@ -20,7 +20,7 @@ typedef struct {
 
 #define DECLARE_SPR(x,y,z,...)
 #define DECLARE_GPR(x,y,z,...)
-#define DECLARE_CMD(x,y,z    ) extern void z( driver_ctx_t* ctx );
+#define DECLARE_CMD(x,y      ) extern void y( driver_ctx_t* ctx );
 #define INCLUDE(x) 
 #include "kernel.conf"
 #undef  DECLARE_SPR

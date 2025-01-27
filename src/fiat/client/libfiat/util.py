@@ -17,19 +17,21 @@ class Req( enum.IntEnum ) :
       request     message tags (or identifiers).
   """
 
-  PING            = 0x00
-  RESET           = 0x01
+  PING            = ord( '!' )
+  RESET           = ord( '*' )
+  VERSION         = ord( '$' )
 
-  SIZEOF          = 0x02
-  USEDOF          = 0x03
-  TYPEOF          = 0x04
+  NAMEOF          = ord( '"' )
+  SIZEOF          = ord( '|' )
+  USEDOF          = ord( '#' )
+  TYPEOF          = ord( '?' )
 
-  WR              = 0x05
-  RD              = 0x06
+  WR              = ord( '>' )
+  RD              = ord( '<' )
 
-  KERNEL          = 0x07
-  KERNEL_PROLOGUE = 0x08
-  KERNEL_EPILOGUE = 0x09
+  KERNEL          = ord( '=' )
+  KERNEL_PROLOGUE = ord( '[' )
+  KERNEL_EPILOGUE = ord( ']' )
 
 class Ack( enum.IntEnum ) :
   """ An enumeration 
@@ -37,9 +39,8 @@ class Ack( enum.IntEnum ) :
       acknowledge message tags (or identifiers).
   """
 
-  SUCCESS         = 0x00
-  FAILURE         = 0x01
-  UNKNOWN         = 0x02
+  SUCCESS         = ord( '+' )
+  FAILURE         = ord( '-' )
 
 class  Type( int ) :
   """ A "rich" type

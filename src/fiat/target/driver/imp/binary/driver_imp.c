@@ -43,7 +43,7 @@ int  driver_vint_rd() {
 
 // ----------------------------------------------------------------------------
 
-DRIVER_CMD(driver_cmd_ping,  {
+DRIVER_CMD(driver_cmd_ping, {
   driver_byte_wr( ACK_SUCCESS );
 });
 
@@ -51,6 +51,30 @@ DRIVER_CMD(driver_cmd_reset, {
   driver_do_reset();
 
   driver_byte_wr( ACK_SUCCESS );
+});
+
+DRIVER_CMD(driver_cmd_version, {
+  driver_byte_wr( ACK_SUCCESS );
+
+  driver_byte_wr( VERSION_PATCH );
+  driver_byte_wr( VERSION_MINOR );
+  driver_byte_wr( VERSION_MAJOR );
+});
+
+DRIVER_CMD(driver_cmd_nameof, {
+  kernel_reg_t* spec = NULL;
+
+  if( ( spec = kernel_reg_byindex( driver_byte_rd() ) ) == NULL ) {
+    driver_byte_wr( ACK_FAILURE );
+  }
+
+  int size = strlen( spec->ident );
+
+  driver_byte_wr( ACK_SUCCESS ); driver_vint_wr( size ); 
+
+  for( int i = 0; i < size; i++ ) {
+    driver_byte_wr( spec->ident[ i ] );
+  }
 });
 
 DRIVER_CMD(driver_cmd_sizeof, {
@@ -135,7 +159,7 @@ DRIVER_CMD(driver_cmd_rd, {
   }
 });
 
-DRIVER_CMD(driver_cmd_kernel,          {
+DRIVER_CMD(driver_cmd_kernel, {
   int op = driver_byte_rd(), rep = driver_vint_rd();
 
   driver_do_kernel( op, rep );
@@ -169,7 +193,7 @@ void driver_interact() {
   switch( driver_vint_rd() ) {
     #define DECLARE_SPR(x,y,z,...)
     #define DECLARE_GPR(x,y,z,...)
-    #define DECLARE_CMD(x,y,z    ) case y: { z( &driver_ctx ); f = true; break; }
+    #define DECLARE_CMD(x,y      ) case x: { y( &driver_ctx ); f = true; break; }
     #define INCLUDE(x) 
     #include "kernel.conf"
     #undef  DECLARE_SPR

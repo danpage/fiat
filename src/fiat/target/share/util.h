@@ -29,19 +29,21 @@
   */
 
 typedef enum {
-  REQ_PING            = 0x00,
-  REQ_RESET           = 0x01,
+  REQ_PING            = '!',
+  REQ_RESET           = '*',
+  REQ_VERSION         = '$',
 
-  REQ_SIZEOF          = 0x02,
-  REQ_USEDOF          = 0x03,
-  REQ_TYPEOF          = 0x04,
+  REQ_NAMEOF          = '"',
+  REQ_SIZEOF          = '|',
+  REQ_USEDOF          = '#',
+  REQ_TYPEOF          = '?',
 
-  REQ_WR              = 0x05,
-  REQ_RD              = 0x06,
+  REQ_WR              = '>',
+  REQ_RD              = '<',
 
-  REQ_KERNEL          = 0x07,
-  REQ_KERNEL_PROLOGUE = 0x08,
-  REQ_KERNEL_EPILOGUE = 0x09
+  REQ_KERNEL          = '=',
+  REQ_KERNEL_PROLOGUE = '[',
+  REQ_KERNEL_EPILOGUE = ']'
 } req_t;
 
 /** An enumeration 
@@ -50,8 +52,8 @@ typedef enum {
   */
 
 typedef enum {
-  ACK_SUCCESS         = 0x00,
-  ACK_FAILURE         = 0x01
+  ACK_SUCCESS         = '+',
+  ACK_FAILURE         = '-'
 } ack_t;
 
 typedef uint8_t byte;
@@ -90,6 +92,8 @@ extern bool    ishex( char x );
 
 extern int  hextoint( char x );
 extern char inttohex( int  x );
+
+extern char* strext( char* r, char* x );
 
 // ============================================================================
 

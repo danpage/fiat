@@ -37,6 +37,18 @@ class Client( object ) :
 
     return self.driver_imp.reset()
 
+  def version( self ) :
+    if ( self.driver_imp == None ) :
+      raise Exception()      
+
+    return self.driver_imp.version()
+
+  def nameof( self, index ) :
+    if ( self.driver_imp == None ) :
+      raise Exception()      
+
+    return self.driver_imp.nameof( index )
+
   def sizeof( self, index ) :
     if ( self.driver_imp == None ) :
       raise Exception()      
@@ -105,9 +117,9 @@ class ClientSocket( Client ) :
     t = socket.socket( socket.AF_INET, socket.SOCK_STREAM ) ; t.connect( ( host, port ) ) ; self.device = t.makefile( mode = 'rwb', buffering = 1024 )
 
     if   ( self.driver == 'binary' ) :
-      self.driver_imp = driver.DriverBinary( device = self.device )
+      self.driver_imp = driver.DriverImpBinary( device = self.device )
     elif ( self.driver == 'text'   ) :
-      self.driver_imp = driver.DriverText  ( device = self.device )
+      self.driver_imp = driver.DriverImpText  ( device = self.device )
     else :
       raise Exception()      
 
@@ -135,9 +147,9 @@ class ClientSerial( Client ) :
     self.device = serial.Serial( port = port, **args )
 
     if   ( self.driver == 'binary' ) :
-      self.driver_imp = driver.DriverBinary( device = self.device )
+      self.driver_imp = driver.DriverImpBinary( device = self.device )
     elif ( self.driver == 'text'   ) :
-      self.driver_imp = driver.DriverText  ( device = self.device )
+      self.driver_imp = driver.DriverImpText  ( device = self.device )
     else :
       raise Exception()      
   
