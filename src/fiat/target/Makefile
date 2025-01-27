@@ -55,7 +55,7 @@ INCLUDES   += $(sort $(dir         $(call include)))
  OBJECTS   += $(addprefix ${REPO_HOME}/build/target/${BOARD}/, $(notdir $(patsubst %.s, %.o, $(filter %.s, ${SOURCES}))))
  OBJECTS   += $(addprefix ${REPO_HOME}/build/target/${BOARD}/, $(notdir $(patsubst %.S, %.o, $(filter %.S, ${SOURCES}))))
 
-GCC_FLAGS  += -DVERSION="${REPO_VERSION}" -DBOARD='"${BOARD}"' -DDRIVER='"${DRIVER}"' ${CONF}
+GCC_FLAGS  += -DVERSION_MAJOR="${REPO_VERSION_MAJOR}" -DVERSION_MINOR="${REPO_VERSION_MINOR}" -DVERSION_PATCH="${REPO_VERSION_PATCH}" -DBOARD='"${BOARD}"' -DDRIVER='"${DRIVER}"' ${CONF}
 GCC_PATHS  +=
 GCC_LIBS   +=
 
