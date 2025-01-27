@@ -11,7 +11,7 @@
 
   #define DECLARE_SPR(x,y,z,...)
   #define DECLARE_GPR(x,y,z,...)
-  #define DECLARE_CMD(x,y,z    )
+  #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
   #include "kernel.conf"
   #undef  DECLARE_SPR
@@ -19,16 +19,13 @@
   #undef  DECLARE_CMD
   #undef  INCLUDE
 
-#if !defined( PARAM_ID  )
-#define PARAM_ID  ( "FIAT" )
-#endif
 #if !defined( PARAM_RND )
-#define PARAM_RND ( 4      )
+#define PARAM_RND ( 4 )
 #endif
 
   #define DECLARE_SPR(x,y,z,...) byte __ ## x[ y ] = z;
   #define DECLARE_GPR(x,y,z,...) byte __ ## x[ y ] = z;
-  #define DECLARE_CMD(x,y,z    )
+  #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
   #include "kernel.conf"
   #undef  DECLARE_SPR
@@ -39,7 +36,7 @@
 kernel_reg_t kernel_spr[] = {
   #define DECLARE_SPR(x,y,z,...) { .ident =   #x, .data = __ ## x, .size = y, .used = 0, .type = { __VA_ARGS__ } },
   #define DECLARE_GPR(x,y,z,...)
-  #define DECLARE_CMD(x,y,z    )
+  #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
   #include "kernel.conf"
   #undef  DECLARE_SPR
@@ -52,7 +49,7 @@ kernel_reg_t kernel_spr[] = {
 kernel_reg_t kernel_gpr[] = {
   #define DECLARE_SPR(x,y,z,...)
   #define DECLARE_GPR(x,y,z,...) { .ident =   #x, .data = __ ## x, .size = y, .used = 0, .type = { __VA_ARGS__ } },
-  #define DECLARE_CMD(x,y,z    )
+  #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
   #include "kernel.conf"
   #undef  DECLARE_SPR
@@ -62,7 +59,6 @@ kernel_reg_t kernel_gpr[] = {
                                  { .ident = NULL, .data =    NULL, .size = 0, .used = 0, .type = {}              }
 };
 
-#undef  PARAM_ID
 #undef  PARAM_RND
 
 // ----------------------------------------------------------------------------
