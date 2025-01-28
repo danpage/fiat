@@ -24,21 +24,24 @@ INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/stm3
 
 GCC_PREFIX  = arm-none-eabi-
 
-GCC_PATHS  += -I ${DEPS}/chipwhisperer/firmware/mcu/hal
-GCC_PATHS  += -I ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/stm32f2
-GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal
-GCC_PATHS  += -L ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/stm32f2
+# 1.  option-related => class 1: architecture
 GCC_FLAGS  += -mcpu="cortex-m3" -mthumb -mfloat-abi="soft" 
-GCC_FLAGS  += -funsigned-char -funsigned-bitfields -fshort-enums -ffunction-sections -Wall -std="gnu99" -Os
-GCC_FLAGS  += -DPLATFORM="CW308_STM32F2" -DHAL_TYPE="HAL_stm32f2" -DSS_VER="1" -DSTM32 -DSTM32F2 -DSTM32F205RETx -DF_CPU="7372800UL"
+# 1.  option-related => class 2: compiler
+GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
+# 1.  option-related => class 3:   linker
 GCC_FLAGS  += -T ${DEPS}/chipwhisperer/firmware/mcu/hal/chipwhisperer-fw-extra/stm32f2/LinkerScript.ld --specs="nano.specs" --specs="nosys.specs" 
+# 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
+GCC_FLAGS  += -DPLATFORM="CW308_STM32F2" -DHAL_TYPE="HAL_stm32f2" -DSS_VER="1" -DSTM32 -DSTM32F2 -DSTM32F205RETx -DF_CPU="7372800UL"
+# 2.    path-related
+GCC_PATHS  +=
+# 3. library-related
 GCC_LIBS   += -lm 
 
 # -----------------------------------------------------------------------------
 
 fetch-deps :
 	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
-	@git -C ${DEPS}/chipwhisperer checkout 1d579a1459f2cb6166813db3b835744ff1a48dc2
+	@git -C ${DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
 	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
 
 patch-deps :

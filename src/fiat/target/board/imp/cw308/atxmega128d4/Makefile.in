@@ -23,7 +23,7 @@ GCC_PREFIX  = avr-
 # 1.  option-related => class 1: architecture
 GCC_FLAGS  += -mmcu="atxmega128d3"
 # 1.  option-related => class 2: compiler
-GCC_FLAGS  += -O3 -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
+GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
 # 1.  option-related => class 3:   linker
 GCC_FLAGS  +=
 # 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
@@ -37,7 +37,7 @@ GCC_LIBS   += -lm
 
 fetch-deps :
 	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
-	@git -C ${DEPS}/chipwhisperer checkout 1d579a1459f2cb6166813db3b835744ff1a48dc2
+	@git -C ${DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
 	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
 
 patch-deps :

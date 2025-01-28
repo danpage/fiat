@@ -27,7 +27,7 @@ GCC_PREFIX  = riscv32-unknown-elf-
 # 1.  option-related => class 1: architecture
 GCC_FLAGS  += -march="rv32imc" -mabi="ilp32" -mcmodel="medany" 
 # 1.  option-related => class 2: compiler
-GCC_FLAGS  += -O3 -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
+GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
 # 1.  option-related => class 3:   linker
 GCC_FLAGS  += -T ${DEPS}/ibex-demo-system/sw/common/link.ld -nostartfiles
 # 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
@@ -41,11 +41,11 @@ GCC_LIBS   += -lm
 
 fetch-deps :
 	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
-	@git -C ${DEPS}/chipwhisperer checkout 1d579a1459f2cb6166813db3b835744ff1a48dc2
+	@git -C ${DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
 	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
 
 	@git clone https://github.com/lowRISC/ibex-demo-system.git ${DEPS}/ibex-demo-system
-	@git -C ${DEPS}/ibex-demo-system checkout a1201cf2b99f8f4149c0971c04c655adbf1753c4
+	@git -C ${DEPS}/ibex-demo-system checkout f4ef5ce5819b94fe2a1a0a1f8cc00d5e06cdbc83
 	@git -C ${DEPS}/ibex-demo-system submodule update --init --recursive
 
 patch-deps :

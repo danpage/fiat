@@ -6,13 +6,26 @@
 
 # =============================================================================
 
+ TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf
+
 GCC_PREFIX  =
 
 GCC_PATHS  += 
 GCC_FLAGS  += 
 GCC_LIBS   += 
 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf
+# 1.  option-related => class 1: architecture
+GCC_FLAGS  +=
+# 1.  option-related => class 2: compiler
+GCC_FLAGS  +=
+# 1.  option-related => class 3:   linker
+GCC_FLAGS  +=
+# 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
+GCC_FLAGS  +=
+# 2.    path-related
+GCC_PATHS  +=
+# 3. library-related
+GCC_LIBS   +=
 
 # -----------------------------------------------------------------------------
 
