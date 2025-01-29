@@ -23,11 +23,11 @@ GCC_PREFIX  = avr-
 # 1.  option-related => class 1: architecture
 GCC_FLAGS  += -mmcu="atxmega128d3"
 # 1.  option-related => class 2: compiler
-GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
+GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections -fpack-struct
 # 1.  option-related => class 3:   linker
 GCC_FLAGS  +=
 # 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
-GCC_FLAGS  += -DPLATFORM="CW303_XMEGA" -DHAL_TYPE="HAL_xmega" -DSS_VER="1" -DF_CPU="7372800UL"
+GCC_FLAGS  += -DPLATFORM="CW303" -DHAL_TYPE="HAL_xmega" -DSS_VER="1" -DF_CPU="7372800UL"
 # 2.    path-related
 GCC_PATHS  +=
 # 3. library-related
