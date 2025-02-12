@@ -9,7 +9,7 @@
 FROM ubuntu
 
 ARG DATE
-ARG BOARD
+ARG FIAT_BOARD
 
 LABEL maintainer="Daniel Page <dan@phoo.org>" url="https://github.com/danpage/fiat" date="${DATE}" 
 
@@ -22,15 +22,15 @@ RUN apt-get --assume-yes --quiet update \
 
 # -----------------------------------------------------------------------------
 
-ENV DEPS="/opt/fiat/deps/${BOARD}"
-RUN mkdir --parents ${DEPS}
+ENV FIAT_DEPS="/opt/fiat_deps/${FIAT_BOARD}"
+RUN mkdir --parents ${FIAT_DEPS}
 
 include(`Dockerfile.in')
 
-COPY Makefile ${DEPS}/Makefile
-RUN make --directory="${DEPS}" fetch-deps \
- && make --directory="${DEPS}" patch-deps \
- && make --directory="${DEPS}" build-deps
+COPY Makefile ${FIAT_DEPS}/Makefile
+RUN make --directory="${FIAT_DEPS}" fetch-deps \
+ && make --directory="${FIAT_DEPS}" patch-deps \
+ && make --directory="${FIAT_DEPS}" build-deps
 
 # -----------------------------------------------------------------------------
 

@@ -14,22 +14,22 @@ is comprised of
    captured by
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/kernel/kernel.h
-   ${REPO_HOME}/src/fiat/target/kernel/kernel.c
+   ${FIAT_HOME}/src/fiat/target/kernel/kernel.h
+   ${FIAT_HOME}/src/fiat/target/kernel/kernel.c
    ```
 
 2. a  concrete implementation
    captured by
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
-   ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
+   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
    ```
 
    plus associated configuration
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
    ```
 
 noting that:
@@ -72,11 +72,12 @@ noting that:
    ```
 
   noting that the terms 
-   Read-Only (RO), 
-  Write-Only (WO), 
+   Read-Only  (RO), 
+  Write-Only  (WO), 
   and 
    Read-Write (RW),
-  are used as a short-hand to describe read and/or write access cases.
+  are used as a short-hand to describe read and/or write access cases
+  (viewed from the perspective of an external client using the target implementation).
 
 - The standard SPRs defined are as follows:
 
@@ -173,7 +174,7 @@ rd index                 ------ cmd -----> data = kernel_gprs[ index ]
 
 where, read top-to-bottom, the idea is that
 
-- the client
+- the client (optionally)
   issues the `wr`              command
   to write any  input data,
 - the client (optionally)
@@ -190,9 +191,9 @@ where, read top-to-bottom, the idea is that
   - performs some "minor"   finalisation,
 
 - the client (optionally)
-  the `kernel_epilogue` command
+  issues the `kernel_epilogue` command
   to perform "major"   finalisation,
-- the client
+- the client (optionally)
   issues the `rd`              command
   to  read any output data.
 
@@ -239,7 +240,7 @@ Based on this, the following command set is supported:
   - `req` syntax: `<byte:req>='$'`
   - `ack` syntax: 
     - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'` || <byte:patch> || <byte:minor> || <byte:major>`
+    - on success, `<byte:ack>='+' || <byte:patch> || <byte:minor> || <byte:major>`
 
 - Query     identifier, or "`nameof`" a register.
   - `req` syntax: `<byte:req>='"' || <byte:index>`
@@ -403,23 +404,23 @@ is comprised of
    captured by
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/board/board.h
-   ${REPO_HOME}/src/fiat/target/board/board.c
+   ${FIAT_HOME}/src/fiat/target/board/board.h
+   ${FIAT_HOME}/src/fiat/target/board/board.c
    ```
 
 2. a  concrete implementation
    captured by
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/board/imp/board_imp.h
-   ${REPO_HOME}/src/fiat/target/board/imp/board_imp.c
+   ${FIAT_HOME}/src/fiat/target/board/imp/board_imp.h
+   ${FIAT_HOME}/src/fiat/target/board/imp/board_imp.c
    ```
 
    plus associated configuration
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/board/imp/Dockerfile.in
-   ${REPO_HOME}/src/fiat/target/board/imp/Makefile.in
+   ${FIAT_HOME}/src/fiat/target/board/imp/Dockerfile.in
+   ${FIAT_HOME}/src/fiat/target/board/imp/Makefile.in
    ```
 
 noting that

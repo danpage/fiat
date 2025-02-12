@@ -6,14 +6,14 @@
 
 # =============================================================================
 
-INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal
-INCLUDES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/avr
+INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal
+INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/avr
 
- SOURCES   += ${DEPS}/chipwhisperer/firmware/mcu/hal/avr/uart.c
+ SOURCES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/avr/uart.c
 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.bin 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.hex
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.elf 
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.bin 
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.hex
 
 GCC_PREFIX  = avr-
 
@@ -33,36 +33,36 @@ GCC_LIBS   += -lm
 # -----------------------------------------------------------------------------
 
 fetch-deps :
-	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
-	@git -C ${DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
-	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
+	@git clone https://github.com/newaetech/chipwhisperer.git ${FIAT_DEPS}/chipwhisperer
+	@git -C ${FIAT_DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
+	@git -C ${FIAT_DEPS}/chipwhisperer submodule update --init --recursive
 
 patch-deps :
 
 build-deps :
 
 clean-deps : 
-	@rm --force --recursive ${DEPS}
+	@rm --force --recursive ${FIAT_DEPS}
 
 # -----------------------------------------------------------------------------
 
-${REPO_HOME}/build/target/${BOARD}/%.o : %.c
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
-${REPO_HOME}/build/target/${BOARD}/%.o : %.s
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
-${REPO_HOME}/build/target/${BOARD}/%.o : %.S
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
 
-${REPO_HOME}/build/target/${BOARD}/%.elf ${REPO_HOME}/build/target/${BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${REPO_HOME}/build/target/${BOARD}/${*}.map" -o ${REPO_HOME}/build/target/${BOARD}/${*}.elf ${^} ${GCC_LIBS}
-${REPO_HOME}/build/target/${BOARD}/%.bin                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.bin                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
 	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="binary" ${<} ${@}
-${REPO_HOME}/build/target/${BOARD}/%.hex                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.hex                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
 	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="ihex"   ${<} ${@}
 
 # -----------------------------------------------------------------------------
 
 program-jtagmkii :
-	@${REPO_HOME}/src/fiat/target/board/imp/${BOARD}/script/program-jtagmkii.sh $(filter %.hex, ${TARGETS})
+	@${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/script/program-jtagmkii.sh $(filter %.hex, ${TARGETS})
 
 # =============================================================================

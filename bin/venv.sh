@@ -8,17 +8,17 @@
 
 # =============================================================================
 
-if [ -z "${REPO_HOME}" ] ; then
+if [ -z "${FIAT_HOME}" ] ; then
   echo "execute 'source ./bin/conf.sh' to configure environment" ; exit
 fi
 
 # -----------------------------------------------------------------------------
 
-python3 -m venv --clear ${REPO_HOME}/build/venv && source ${REPO_HOME}/build/venv/bin/activate
+python3 -m venv --clear ${FIAT_HOME}/build/venv && source ${FIAT_HOME}/build/venv/bin/activate
 
 if [ -z "${1}" ] ; then 
   python3 -m pip install --upgrade pip
-  python3 -m pip install -r ${REPO_HOME}/requirements.txt
+  python3 -m pip install -r ${FIAT_HOME}/requirements.txt
 else
   python3 -m pip install --upgrade pip
   python3 -m pip install -r ${1}

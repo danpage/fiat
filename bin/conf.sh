@@ -8,12 +8,12 @@
 
 # =============================================================================
 
-export REPO_HOME="${PWD}"
+export FIAT_HOME="${PWD}"
 
-export REPO_VERSION_MAJOR="0"
-export REPO_VERSION_MINOR="1"
-export REPO_VERSION_PATCH="1"
+export FIAT_VERSION_MAJOR="0"
+export FIAT_VERSION_MINOR="1"
+export FIAT_VERSION_PATCH="2"
 
-export REPO_VERSION="${REPO_VERSION_MAJOR}.${REPO_VERSION_MINOR}.${REPO_VERSION_PATCH}"
+export FIAT_VERSION="${FIAT_VERSION_MAJOR}.${FIAT_VERSION_MINOR}.${FIAT_VERSION_PATCH}"
 
 # =============================================================================

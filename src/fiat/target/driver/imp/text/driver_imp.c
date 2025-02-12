@@ -127,11 +127,11 @@ DRIVER_CMD(driver_cmd_version, {
 
     p = strext( p, "+" );
     p = strext( p, " " );
-    p = driver_byte_wr( p, VERSION_PATCH );
+    p = driver_byte_wr( p, FIAT_VERSION_PATCH );
     p = strext( p, " " );
-    p = driver_byte_wr( p, VERSION_MINOR );
+    p = driver_byte_wr( p, FIAT_VERSION_MINOR );
     p = strext( p, " " );
-    p = driver_byte_wr( p, VERSION_MAJOR );
+    p = driver_byte_wr( p, FIAT_VERSION_MAJOR );
 });
 
 DRIVER_CMD(driver_cmd_nameof, {

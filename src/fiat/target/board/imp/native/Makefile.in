@@ -6,7 +6,7 @@
 
 # =============================================================================
 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.elf
 
 GCC_PREFIX  =
 
@@ -39,14 +39,14 @@ clean-deps:
 
 # -----------------------------------------------------------------------------
 
-${REPO_HOME}/build/target/${BOARD}/%.o : %.c
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
-${REPO_HOME}/build/target/${BOARD}/%.o : %.s
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
-${REPO_HOME}/build/target/${BOARD}/%.o : %.S
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<} 2>&1 | tee ${REPO_HOME}/build/target/${BOARD}/${*}.log
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
 
-${REPO_HOME}/build/target/${BOARD}/%.elf ${REPO_HOME}/build/target/${BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${REPO_HOME}/build/target/${BOARD}/${*}.map" -o ${REPO_HOME}/build/target/${BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
 
 # =============================================================================

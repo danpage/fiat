@@ -13,10 +13,10 @@ reflecting such a block cipher, or at least a trivial proxy for one,
 could be developed and used.  To do so, we use the `native` 
 build context 
 and 
-board type
+board type:
 this allows the target implementation to be built *and* executed on
 the development platform itself with no real dependencies
-(e.g., with an already available [GCC](https://en.wikipedia.org/wiki/GNU_Compiler_Collection)),
+(e.g., with an installation of [GCC](https://en.wikipedia.org/wiki/GNU_Compiler_Collection) already available),
 and thus offers a way to prototype and debug both target and client 
 implementations.
 
@@ -29,7 +29,7 @@ implementations.
    by editing
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
    ```
 
    In particular,
@@ -53,7 +53,7 @@ implementations.
    by editing
 
    ```sh
-   ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
    ```
 
    In particular,
@@ -74,7 +74,7 @@ implementations.
    ```
 
    Doing so means
-   `c` will be computed `k ^ m` (i.e., XOR'ing `k` and `m` together).
+   `c` will be computed as `k ^ m` (i.e., XOR'ing `k` and `m` together).
 
 <!--- -------------------------------------------------------------------- --->
 
@@ -84,14 +84,14 @@ implementations.
   execute
 
   ```sh
-  CONTEXT="native" BOARD="native" DRIVER="binary" make target/clean target/build
+  FIAT_CONTEXT="native" FIAT_DRIVER="binary" FIAT_BOARD="native" make target/clean target/build
   ```
   
   to use the `binary` driver,
   *or*
 
   ```sh
-  CONTEXT="native" BOARD="native" DRIVER="text"   make target/clean target/build
+  FIAT_CONTEXT="native" FIAT_DRIVER="text"   FIAT_BOARD="native" make target/clean target/build
   ```
 
   to use the `text`   driver.
@@ -104,7 +104,7 @@ To drive interaction with the target implementation, we use an example
 client implementation located in
 
 ```sh
-${REPO_HOME}/src/fiat/client/script/example.py
+${FIAT_HOME}/src/fiat/client/script/example.py
 ```
 
 whose core functionality is captured by the following fragment:
@@ -153,7 +153,7 @@ Now we can execute the target and client, and interaction between them:
   execute
 
   ```sh
-  ncat --verbose --listen --source-port 1234 --hex-dump ${REPO_HOME}/build/target/native/target.ncat --exec ${REPO_HOME}/build/target/native/target.elf
+  ncat --verbose --listen --source-port 1234 --hex-dump ${FIAT_HOME}/build/target/native/target.ncat --exec ${FIAT_HOME}/build/target/native/target.elf
   ```
 
   Doing so uses 
@@ -166,7 +166,7 @@ Now we can execute the target and client, and interaction between them:
   we can connect to.  Notice that use of 
   `--hex-dump`
   means that all communicated data will be captured in the file
-  `${REPO_HOME}/build/target/native/target.ncat`
+  `${FIAT_HOME}/build/target/native/target.ncat`
 
 - In terminal 2, 
   install
@@ -181,14 +181,14 @@ Now we can execute the target and client, and interaction between them:
   execute
 
   ```sh
-  python3 ${REPO_HOME}/src/fiat/client/example/example.py --device='socket' --driver='binary' --host='127.0.0.1' --port='1234' --seed='0'
+  python3 ${FIAT_HOME}/src/fiat/client/script/example.py --device='socket' --driver='binary' --host='127.0.0.1' --port='1234' --seed='0'
   ```
 
   to use the `binary` driver,
   *or*
 
   ```sh
-  python3 ${REPO_HOME}/src/fiat/client/example/example.py --device='socket' --driver='text'   --host='127.0.0.1' --port='1234' --seed='0'
+  python3 ${FIAT_HOME}/src/fiat/client/script/example.py --device='socket' --driver='text'   --host='127.0.0.1' --port='1234' --seed='0'
   ```
 
   to use the `text`   driver.
@@ -232,7 +232,7 @@ received from the target implementation matches the
 we compute locally: this demonstrates it is operating as expected.
 
 - From use of the `binary` driver,
-  `${REPO_HOME}/build/target/native/target.ncat`
+  `${FIAT_HOME}/build/target/native/target.ncat`
   reads as follows:
 
   ```
@@ -280,7 +280,7 @@ we compute locally: this demonstrates it is operating as expected.
   ```
 
 - From use of the `text`   driver,
-  `${REPO_HOME}/build/target/native/target.ncat`
+  `${FIAT_HOME}/build/target/native/target.ncat`
   reads as follows:
 
   ```

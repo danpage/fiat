@@ -4,37 +4,37 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
-ifndef REPO_HOME
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-ifndef REPO_VERSION
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-
 # =============================================================================
 
-export CONTEXT      ?= native
+export FIAT_CONTEXT       ?= native
+export FIAT_DRIVER        ?= binary
+export FIAT_BOARD         ?= native
 
-export DRIVER       ?= binary
-export BOARD        ?= native
-export CONF         ?=
+export FIAT_KERNEL        ?= ${FIAT_HOME}/src/fiat/target/kernel/imp
+export FIAT_BUILD         ?= ${FIAT_HOME}/build
 
-export DEPS         ?= ${REPO_HOME}/build/deps/${BOARD}
+export FIAT_DEPS          ?= ${FIAT_BUILD/deps/${FIAT_BOARD}
 
 # -----------------------------------------------------------------------------
 
-export DOCKER_REPO  ?= danpage/fiat.$(subst /,-,${BOARD})
-export DOCKER_TAG   ?= ${REPO_VERSION}
+export DOCKER_IMAGE ?= danpage/fiat.$(subst /,-,${FIAT_BOARD})
+export DOCKER_TAG   ?= ${FIAT_VERSION}
 export DOCKER_FLAGS ?= 
 
+export DOCKER_FLAGS += --volume "${FIAT_HOME}:/mnt/fiat_home" 
+export DOCKER_FLAGS += --volume "${FIAT_KERNEL}:/mnt/fiat_kernel" 
+export DOCKER_FLAGS += --volume "${FIAT_BUILD}:/mnt/fiat_build"
+
 export DOCKER_FLAGS += --env DOCKER_GID="$(shell id --group)" 
-export DOCKER_FLAGS += --env DOCKER_UID="$(shell id --user)" 
+export DOCKER_FLAGS += --env DOCKER_UID="$(shell id --user )" 
 
-export DOCKER_FLAGS += --env    CONTEXT="native" 
+export DOCKER_FLAGS += --env FIAT_CONTEXT="native"
+export DOCKER_FLAGS += --env FIAT_DRIVER="${FIAT_DRIVER}"
+export DOCKER_FLAGS += --env FIAT_BOARD="${FIAT_BOARD}" 
 
-export DOCKER_FLAGS += --env     DRIVER="${DRIVER}" 
-export DOCKER_FLAGS += --env      BOARD="${BOARD}" 
-export DOCKER_FLAGS += --env       CONF="${CONF}" 
+export DOCKER_FLAGS += --env FIAT_HOME="/mnt/fiat_home"
+export DOCKER_FLAGS += --env FIAT_KERNEL="/mnt/fiat_kernel"
+export DOCKER_FLAGS += --env FIAT_BUILD="/mnt/fiat_build"
 
 # =============================================================================
 
@@ -51,32 +51,32 @@ export DOCKER_FLAGS += --env       CONF="${CONF}"
 
 # -----------------------------------------------------------------------------
 
-ifeq "${CONTEXT}" "docker"
+ifeq "${FIAT_CONTEXT}" "docker"
 %        :
-	@docker run --rm --volume "${REPO_HOME}:/mnt/fiat" ${DOCKER_FLAGS} ${DOCKER_REPO}:${DOCKER_TAG} ${*}
+	@docker run --rm ${DOCKER_FLAGS} ${DOCKER_IMAGE}:${DOCKER_TAG} ${*}
 endif
 
 # -----------------------------------------------------------------------------
 
-ifeq "${CONTEXT}" "native"
+ifeq "${FIAT_CONTEXT}" "native"
    doc/%     :
-	@make --directory="${REPO_HOME}/doc"             ${*}
+	@make --directory="${FIAT_HOME}/doc"             ${*}
 docker/%     :
-	@make --directory="${REPO_HOME}/src/docker"      ${*}
+	@make --directory="${FIAT_HOME}/src/docker"      ${*}
 client/%     :
-	@make --directory="${REPO_HOME}/src/fiat/client" ${*}
+	@make --directory="${FIAT_HOME}/src/fiat/client" ${*}
 target/%     :
-	@make --directory="${REPO_HOME}/src/fiat/target" ${*}
+	@make --directory="${FIAT_HOME}/src/fiat/target" ${*}
 
-  venv/build : ${REPO_HOME}/requirements.txt
-	@${REPO_HOME}/bin/venv.sh ${<}
-  venv/clean : ${REPO_HOME}/requirements.txt
-	@rm --force --recursive ${REPO_HOME}/build/venv
+  venv/build : ${FIAT_HOME}/requirements.txt
+	@${FIAT_HOME}/bin/venv.sh ${<}
+  venv/clean : ${FIAT_HOME}/requirements.txt
+	@rm --force --recursive ${FIAT_BUILD}/venv
 
 clean        : 
 
 spotless     : clean
-	@rm --force --recursive ${REPO_HOME}/build/*
+	@rm --force --recursive ${FIAT_BUILD}/*
 endif
 
 # =============================================================================

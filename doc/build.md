@@ -4,7 +4,7 @@
 
 ## Overview
 
-`${REPO_HOME}/Makefile` can be used to drive the build process, e.g., via
+`${FIAT_HOME}/Makefile` can be used to drive the build process, e.g., via
 
 | Command                  | Description                                                    |
 |:-------------------------|:---------------------------------------------------------------|
@@ -20,17 +20,17 @@
 | `make target/patch-deps` | patch                  the target implementation dependencies  |
 | `make target/build-deps` | build                  the target implementation dependencies  |
 | `make target/clean-deps` | clean                  the target implementation dependencies  |
-| `make clean`             |  selectively remove content built in `${REPO_HOME}/build`      |
-| `make spotless`          | aggressively remove content built in `${REPO_HOME}/build`      |
+| `make clean`             |  selectively remove artefacts produced by the build system     |
+| `make spotless`          | aggressively remove artefacts produced by the build system     |
 
 with configuration options for it outlined in the following.
 
 <!--- -------------------------------------------------------------------- --->
 
-## The `CONTEXT` environment variable
+## The `FIAT_CONTEXT` environment variable
     
 The
-`CONTEXT`
+`FIAT_CONTEXT`
 environment variable specifies the
 build context
 within which the build process is executed.
@@ -57,12 +57,46 @@ noting that:
   any software dependencies (e.g., libraries)
   are installed within the associated container.
 
+The
+[Docker](https://www.docker.com)
+image which supports the
+`docker`
+build context for a given board type is built using
+
+- board-agnostic content in 
+  `${FIAT_HOME}/src/docker`,
+  plus
+- board-specific content in 
+  `${FIAT_HOME}/src/target/board/imp/${FIAT_BOARD}/Dockerfile.in`.
+
+However, *there is no need to do this manually*: a pre-built image 
+can (and will) be pulled from
+[Docker Hub](https://hub.docker.com/u/danpage)
+by the build process as needed. 
+If you *do* want to build such an image, note that
+
+```sh
+FIAT_CONTEXT="native" make docker/clean
+FIAT_CONTEXT="native" make docker/build
+```
+
+will clean (or remove) and build the image  for *one* board type
+(specified using `${FIAT_BOARD}`)
+
+```sh
+${FIAT_HOME}/bin/docker.sh clean
+${FIAT_HOME}/bin/docker.sh build
+```
+
+will clean (or remove) and build the images for *all* board types
+(identified by searching for instances of `Dockerfile.in` in `${FIAT_HOME}/src/fiat/target/board/imp`).
+
 <!--- -------------------------------------------------------------------- --->
 
-## The `DRIVER`  environment variable
+## The `FIAT_DRIVER`  environment variable
 
 The
-`DRIVER`
+`FIAT_DRIVER`
 environment variable specifies the
 [driver type](target.md#target-driver).
 The options are
@@ -72,15 +106,15 @@ The options are
 
 <!--- -------------------------------------------------------------------- --->
 
-## The `BOARD`   environment variable
+## The `FIAT_BOARD`   environment variable
 
 The
-`BOARD`
+`FIAT_BOARD`
 environment variable specifies the
 [board  type](target.md#target-board).
 The options are
 
-| `BOARD`                | Class      | Vendor                                          | Core                                                          | Model                                                                          | ISA      | Host                                                                                  |
+| `FIAT_BOARD`         | Class      | Vendor                                          | Core                                                          | Model                                                                          | ISA      | Host                                                                                  |
 |:-----------------------|:-----------|:------------------------------------------------|:--------------------------------------------------------------|:-------------------------------------------------------------------------------|:---------|:--------------------------------------------------------------------------------------|
 | `native`               | Simulation |                                                 |                                                               |                                                                                |          |                                                                                       |
 | `cw308/atmega328p`     | ASIC       |          [Microchip](https://www.microchip.com) | [ATmega](https://en.wikipedia.org/wiki/AVR_microcontrollers)  | [ATMEGA328P](https://www.microchip.com/en-us/product/atmega328p)               | AVR      | [ChipWhisperer CW308](https://rtfm.newae.com/Targets/UFO%20Targets/CW308T-AVR)        |
@@ -95,41 +129,30 @@ The options are
 
 <!--- -------------------------------------------------------------------- --->
 
-## Container management
+## The `FIAT_KERNEL` and `FIAT_BUILD` environment variables
+
+- By default, the 
+  [workflow](workflow.md)
+  assumes you first clone the FIAT repository then develop a target 
+  implementation *within* that clone, i.e., "in-tree".  However, it
+  can be useful to do so "out-of-tree": example scenarios include
+  when the target implementation is part of another project, with
+  resources in the repository simply used to build it.
 
 - The
-  [Docker](https://www.docker.com)
-  image for a given board type is built using
+  `FIAT_KERNEL`
+  environment variable specifies 
+  where the target implementation is located:
+  by default it is set "in-tree" to equal
+  `${FIAT_HOME}/src/fiat/target/kernel/imp`,
+  but this can be overridden.
 
-  - board-agnostic content in 
-    `${REPO_HOME}/src/docker`,
-    plus
-  - board-specific content in 
-    `${REPO_HOME}/src/target/board/imp/${BOARD}/Dockerfile.in`.
-
-  However,
-  *there is no need to do this manually*:
-  a pre-built image can (and will) be pulled from
-  [Docker Hub](https://hub.docker.com/u/danpage)
-  by the build process as needed.
-
-
-- If you *do* want to build such an image, note that
-
-  ```sh
-  CONTEXT="native" make docker/clean
-  CONTEXT="native" make docker/build
-  ```
-
-  will clean (or remove) and build the image  for *one* board type
-  (specified using `${BOARD}`)
-
-  ```sh
-  ${REPO_HOME}/bin/docker.sh clean
-  ${REPO_HOME}/bin/docker.sh build
-  ```
-
-  will clean (or remove) and build the images for *all* board types
-  (identified by searching for instances of `Dockerfile.in` in `${REPO_HOME}/src/fiat/target/board/imp`).
+- The
+  `FIAT_BUILD`
+  environment variable specifies 
+  where artefacts produced by the build system will be located:
+  by default it is set "in-tree" to equal
+  `${FIAT_HOME}/build`,
+  but this can be overridden.
 
 <!--- ==================================================================== --->

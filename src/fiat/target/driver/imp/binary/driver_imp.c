@@ -56,9 +56,9 @@ DRIVER_CMD(driver_cmd_reset, {
 DRIVER_CMD(driver_cmd_version, {
   driver_byte_wr( ACK_SUCCESS );
 
-  driver_byte_wr( VERSION_PATCH );
-  driver_byte_wr( VERSION_MINOR );
-  driver_byte_wr( VERSION_MAJOR );
+  driver_byte_wr( FIAT_VERSION_PATCH );
+  driver_byte_wr( FIAT_VERSION_MINOR );
+  driver_byte_wr( FIAT_VERSION_MAJOR );
 });
 
 DRIVER_CMD(driver_cmd_nameof, {

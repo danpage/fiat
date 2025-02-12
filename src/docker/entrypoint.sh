@@ -22,6 +22,6 @@ groupadd --force --gid ${DOCKER_GID} ${DOCKER_USER} ; useradd --gid ${DOCKER_GID
 
 # -----------------------------------------------------------------------------
 
-cd /mnt/fiat ; source ./bin/conf.sh ; exec /usr/sbin/gosu ${DOCKER_USER} bash --login -c "make --directory=${REPO_HOME} ${*}"
+cd /mnt/fiat_home ; source ./bin/conf.sh ; exec /usr/sbin/gosu ${DOCKER_USER} bash --login -c "make ${*}"
 
 # =============================================================================

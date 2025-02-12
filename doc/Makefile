@@ -4,19 +4,12 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
-ifndef REPO_HOME
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-ifndef REPO_VERSION
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-
 # =============================================================================
 
 build :
-	@sphinx-build -M  html ${CURDIR} ${REPO_HOME}/build/doc
+	@sphinx-build -M  html ${CURDIR} ${FIAT_BUILD}/doc
 
 clean :
-	@sphinx-build -M clean ${CURDIR} ${REPO_HOME}/build/doc
+	@sphinx-build -M clean ${CURDIR} ${FIAT_BUILD}/doc
 
 # =============================================================================

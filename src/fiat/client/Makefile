@@ -4,29 +4,22 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
-ifndef REPO_HOME
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-ifndef REPO_VERSION
-  $(error "execute 'source ./bin/conf.sh' to configure environment")
-endif
-
 # =============================================================================
 
 .PHONY: build
 
 build        :
-	@hatch build   --clean     ${REPO_HOME}/build/client
+	@hatch build   --clean     ${FIAT_BUILD}/client
 
 publish      :
-	@hatch publish --repo main ${REPO_HOME}/build/client
+	@hatch publish --repo main ${FIAT_BUILD}/client
 publish-test :
-	@hatch publish --repo test ${REPO_HOME}/build/client
+	@hatch publish --repo test ${FIAT_BUILD}/client
 
 clean        :
 	@hatch clean
 
 spotless     :
-	@rm --force --recursive ${REPO_HOME}/build/client
+	@rm --force --recursive ${FIAT_BUILD}/client
 
 # =============================================================================

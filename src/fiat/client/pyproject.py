@@ -8,6 +8,6 @@ import hatchling.metadata.plugin.interface, os
 
 class CustomMetaDataHook( hatchling.metadata.plugin.interface.MetadataHookInterface ) :
   def update( self, metadata ) :
-    metadata[ 'version' ] = os.environ[ 'REPO_VERSION' ]
-    metadata[ 'license' ] = { 'file' : os.path.relpath( os.path.join( os.environ[ 'REPO_HOME' ], 'LICENSE.txt' ) ), 'content-type' : 'text/plain' }
-    metadata[ 'readme'  ] = { 'file' : os.path.relpath( os.path.join( os.environ[ 'REPO_HOME' ], 'doc', 'README.md' ) ), 'content-type' : 'text/markdown' }
+    metadata[ 'version' ] = os.environ[ 'FIAT_VERSION' ]
+    metadata[ 'license' ] = { 'file' : os.path.relpath( os.path.join( os.environ[ 'FIAT_HOME' ], 'LICENSE.txt' ) ), 'content-type' : 'text/plain' }
+    metadata[ 'readme'  ] = { 'file' : os.path.relpath( os.path.join( os.environ[ 'FIAT_HOME' ], 'doc', 'README.md' ) ), 'content-type' : 'text/markdown' }

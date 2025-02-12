@@ -16,7 +16,7 @@
      e.g., board-specific versions of
      [GCC](https://gcc.gnu.org)
      and
-     [OpenOCD](http://openocd.org),
+     [OpenOCD](https://openocd.org),
      *or*
 
   2. provide a Docker build context by installing 
@@ -48,6 +48,8 @@
      git clone https://github.com/danpage/fiat.git ./fiat
      ```
 
+  to clone the repository.
+
 - Execute
 
   ```sh
@@ -57,10 +59,8 @@
   
   to configure the environment.
   For example, you should find that the
-  `REPO_HOME`
-  and
-  `REPO_VERSION`
-  environment variables are set appropriately.
+  `FIAT_HOME`
+  environment variable is set appropriately.
 
 <!--- -------------------------------------------------------------------- --->
 
@@ -69,7 +69,7 @@
 - Edit
 
   ```sh
-  ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
   ```
 
   to configure the target implementation (and support for it),
@@ -77,8 +77,8 @@
 - Edit
 
   ```sh
-  ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
-  ${REPO_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
+  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
   ```
 
   to complete the target implementation itself.
@@ -94,7 +94,7 @@
   set the associated environment variable, e.g., by executing
 
   ```sh
-  export CONTEXT="native"
+  export FIAT_CONTEXT="native"
   ```
 
   *or* accept default of `native`.
@@ -106,7 +106,7 @@
   set the associated environment variable, e.g., by executing
 
   ```sh
-  export DRIVER="binary"
+  export FIAT_DRIVER="binary"
   ```
 
   *or* accept default of `binary`.
@@ -118,7 +118,7 @@
   set the associated environment variable, e.g., by executing
 
   ```sh
-  export BOARD="native"
+  export FIAT_BOARD="native"
   ```
 
   *or* accept default of `native`.
@@ -154,15 +154,14 @@
 
 ## Step 5: use     target implementation
 
-- *If* the build process succeeds, it produces associated artifacts in
-  `${REPO_HOME}/build/target/${BOARD}`, e.g.,
+- *If* the build process succeeds, it produces associated artefacts, 
+  e.g.,
   
   ```sh
-  ${REPO_HOME}/build/target/${BOARD}/target.elf
-  ${REPO_HOME}/build/target/${BOARD}/target.bin
-  ${REPO_HOME}/build/target/${BOARD}/target.hex
+  ${FIAT_HOME}/build/target/${FIAT_BOARD}/target.elf
   ```
 
+  in `${FIAT_HOME}/build/target/${FIAT_BOARD}`.
   Using the appropriate programming infrastructure, you can program 
   your board with one of them.
 

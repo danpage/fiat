@@ -6,21 +6,21 @@
 
 # =============================================================================
 
-INCLUDES   += ${DEPS}/ibex-demo-system/sw/c/common
+INCLUDES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common
 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/demo_system.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/uart.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/timer.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/gpio.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/pwm.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/spi.c 
- SOURCES   += ${DEPS}/ibex-demo-system/sw/c/common/crt0.S
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/demo_system.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/uart.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/timer.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/gpio.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/pwm.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/spi.c 
+ SOURCES   += ${FIAT_DEPS}/ibex-demo-system/sw/c/common/crt0.S
 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.elf 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.bin 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.hex
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.elf 
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.bin 
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.hex
 
- TARGETS   += ${REPO_HOME}/build/target/${BOARD}/target.vmem
+ TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.vmem
 
 GCC_PREFIX  = riscv32-unknown-elf-
 
@@ -29,7 +29,7 @@ GCC_FLAGS  += -march="rv32imc" -mabi="ilp32" -mcmodel="medany"
 # 1.  option-related => class 2: compiler
 GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
 # 1.  option-related => class 3:   linker
-GCC_FLAGS  += -T ${DEPS}/ibex-demo-system/sw/common/link.ld -nostartfiles
+GCC_FLAGS  += -T ${FIAT_DEPS}/ibex-demo-system/sw/common/link.ld -nostartfiles
 # 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
 GCC_FLAGS  +=
 # 2.    path-related
@@ -40,38 +40,38 @@ GCC_LIBS   += -lm
 # -----------------------------------------------------------------------------
 
 fetch-deps :
-	@git clone https://github.com/newaetech/chipwhisperer.git ${DEPS}/chipwhisperer
-	@git -C ${DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
-	@git -C ${DEPS}/chipwhisperer submodule update --init --recursive
+	@git clone https://github.com/newaetech/chipwhisperer.git ${FIAT_DEPS}/chipwhisperer
+	@git -C ${FIAT_DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
+	@git -C ${FIAT_DEPS}/chipwhisperer submodule update --init --recursive
 
-	@git clone https://github.com/lowRISC/ibex-demo-system.git ${DEPS}/ibex-demo-system
-	@git -C ${DEPS}/ibex-demo-system checkout f4ef5ce5819b94fe2a1a0a1f8cc00d5e06cdbc83
-	@git -C ${DEPS}/ibex-demo-system submodule update --init --recursive
+	@git clone https://github.com/lowRISC/ibex-demo-system.git ${FIAT_DEPS}/ibex-demo-system
+	@git -C ${FIAT_DEPS}/ibex-demo-system checkout f4ef5ce5819b94fe2a1a0a1f8cc00d5e06cdbc83
+	@git -C ${FIAT_DEPS}/ibex-demo-system submodule update --init --recursive
 
 patch-deps :
 
 build-deps :
 
 clean-deps : 
-	@rm --force --recursive ${DEPS}
+	@rm --force --recursive ${FIAT_DEPS}
 
 # -----------------------------------------------------------------------------
 
-${REPO_HOME}/build/target/${BOARD}/%.o : %.c
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
-${REPO_HOME}/build/target/${BOARD}/%.o : %.s
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
-${REPO_HOME}/build/target/${BOARD}/%.o : %.S
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
 	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
 
-${REPO_HOME}/build/target/${BOARD}/%.elf ${REPO_HOME}/build/target/${BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${REPO_HOME}/build/target/${BOARD}/${*}.map" -o ${REPO_HOME}/build/target/${BOARD}/${*}.elf ${^} ${GCC_LIBS}
-${REPO_HOME}/build/target/${BOARD}/%.bin                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.bin                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
 	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="binary" ${<} ${@}
-${REPO_HOME}/build/target/${BOARD}/%.hex                                          : ${REPO_HOME}/build/target/${BOARD}/%.elf
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.hex                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
 	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="ihex"   ${<} ${@}
 
-${REPO_HOME}/build/target/${BOARD}/%.vmem                                         : ${REPO_HOME}/build/target/${BOARD}/%.bin
+${FIAT_BUILD}/target/${FIAT_BOARD}/%.vmem                                         : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.bin
 	@srec_cat ${<} -binary -offset 0x0000 -byte-swap 4 -o ${@} -vmem
 
 # =============================================================================

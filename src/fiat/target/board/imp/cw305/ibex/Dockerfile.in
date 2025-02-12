@@ -9,9 +9,9 @@
 RUN apt-get --assume-yes --quiet install srecord
 
 RUN wget --quiet --output-document="lowrisc-toolchain-gcc-rv32imcb-20240923-1.tar.xz" https://github.com/lowRISC/lowrisc-toolchains/releases/download/20240923-1/lowrisc-toolchain-gcc-rv32imcb-20240923-1.tar.xz \
- && tar --extract --directory ${DEPS} --file ./lowrisc-toolchain-gcc-rv32imcb-20240923-1.tar.xz \
+ && tar --extract --directory ${FIAT_DEPS} --file ./lowrisc-toolchain-gcc-rv32imcb-20240923-1.tar.xz \
  && rm --force ./lowrisc-toolchain-gcc-rv32imcb-20240923-1.tar.xz
 
-ENV PATH "${PATH}:${DEPS}/lowrisc-toolchain-gcc-rv32imcb-20240923-1/bin"
+ENV PATH "${PATH}:${FIAT_DEPS}/lowrisc-toolchain-gcc-rv32imcb-20240923-1/bin"
 
 # =============================================================================
