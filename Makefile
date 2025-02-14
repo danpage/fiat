@@ -6,14 +6,20 @@
 
 # =============================================================================
 
-export FIAT_CONTEXT       ?= native
-export FIAT_DRIVER        ?= binary
-export FIAT_BOARD         ?= native
+export FIAT_CONTEXT ?= native
+export FIAT_DRIVER  ?= binary
+export FIAT_BOARD   ?= native
 
-export FIAT_KERNEL        ?= ${FIAT_HOME}/src/fiat/target/kernel/imp
-export FIAT_BUILD         ?= ${FIAT_HOME}/build
+export FIAT_KERNEL  ?= ${FIAT_HOME}/src/fiat/target/kernel/imp
+export FIAT_BUILD   ?= ${FIAT_HOME}/build
 
-export FIAT_DEPS          ?= ${FIAT_BUILD/deps/${FIAT_BOARD}
+export FIAT_DEPS    ?= ${FIAT_BUILD/deps/${FIAT_BOARD}
+
+# -----------------------------------------------------------------------------
+
+export GCC_FLAGS    ?=
+export GCC_PATHS    ?=
+export GCC_LIBS     ?=
 
 # -----------------------------------------------------------------------------
 
@@ -35,6 +41,10 @@ export DOCKER_FLAGS += --env FIAT_BOARD="${FIAT_BOARD}"
 export DOCKER_FLAGS += --env FIAT_HOME="/mnt/fiat_home"
 export DOCKER_FLAGS += --env FIAT_KERNEL="/mnt/fiat_kernel"
 export DOCKER_FLAGS += --env FIAT_BUILD="/mnt/fiat_build"
+
+export DOCKER_FLAGS += --env GCC_FLAGS="${GCC_FLAGS}"
+export DOCKER_FLAGS += --env GCC_PATHS="${GCC_PATHS}"
+export DOCKER_FLAGS += --env GCC_LIBS="${GCC_LIBS}"
 
 # =============================================================================
 

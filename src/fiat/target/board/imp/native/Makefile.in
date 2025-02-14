@@ -10,10 +10,6 @@
 
 GCC_PREFIX  =
 
-GCC_PATHS  += 
-GCC_FLAGS  += 
-GCC_LIBS   += 
-
 # 1.  option-related => class 1: architecture
 GCC_FLAGS  +=
 # 1.  option-related => class 2: compiler

@@ -7,7 +7,7 @@
 # =============================================================================
 
 define include 
-  $(shell cpp -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x" -P -I ${FIAT_KERNEL} ${FIAT_HOME}/src/fiat/target/kernel/kernel.conf | sed -e '/^[[:space:]]*$$/d' | envsubst)
+  $(shell ${GCC_PREFIX}cpp -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x" ${GCC_FLAGS} -I ${FIAT_KERNEL} -P ${FIAT_HOME}/src/fiat/target/kernel/kernel.conf | sed -e '/^[[:space:]]*$$/d' | envsubst)
 endef
 
 EMPTY      :=
@@ -85,16 +85,16 @@ ${CLEAN_PATHS} :
 # Define targets to drive build process.
 
 debug    :
-	@echo "GCC_PREFIX := ${GCC_PREFIX}"
-	@echo "GCC_FLAGS  := ${GCC_FLAGS}"
-	@echo "GCC_PATHS  := ${GCC_PATHS}"
-	@echo "GCC_LIBS   := ${GCC_LIBS}"
-
 	@echo "INCLUDES   := ${INCLUDES}"
 	@echo "SOURCES    := ${SOURCES}"
 	@echo "HEADERS    := ${HEADERS}"
 	@echo "OBJECTS    := ${OBJECTS}"
 	@echo "TARGETS    := ${TARGETS}"
+
+	@echo "GCC_PREFIX := ${GCC_PREFIX}"
+	@echo "GCC_FLAGS  := ${GCC_FLAGS}"
+	@echo "GCC_PATHS  := ${GCC_PATHS}"
+	@echo "GCC_LIBS   := ${GCC_LIBS}"
 
 build    :                      ${BUILD_PATHS} ${BUILD_FILES}
 
