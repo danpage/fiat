@@ -62,7 +62,7 @@ export DOCKER_FLAGS += --env GCC_LIBS="${GCC_LIBS}"
 # -----------------------------------------------------------------------------
 
 ifeq "${FIAT_CONTEXT}" "docker"
-%        :
+% :
 	@docker run --rm ${DOCKER_FLAGS} ${DOCKER_IMAGE}:${DOCKER_TAG} ${*}
 endif
 
