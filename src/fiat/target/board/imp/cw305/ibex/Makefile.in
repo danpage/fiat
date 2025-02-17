@@ -28,14 +28,14 @@ GCC_PREFIX  = riscv32-unknown-elf-
 GCC_FLAGS  += -march="rv32imc" -mabi="ilp32" -mcmodel="medany" 
 # 1.  option-related => class 2: compiler
 GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
-# 1.  option-related => class 3:   linker
+# 1.  option-related => class 3: linker
 GCC_FLAGS  += -T ${FIAT_DEPS}/ibex-demo-system/sw/common/link.ld -nostartfiles
-# 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
-GCC_FLAGS  +=
 # 2.    path-related
 GCC_PATHS  +=
 # 3. library-related
 GCC_LIBS   += -lm 
+# 4.  define-related (e.g., configuration of HAL, BSP, etc.)
+GCC_DEFS   +=
 
 # -----------------------------------------------------------------------------
 
@@ -58,14 +58,14 @@ clean-deps :
 # -----------------------------------------------------------------------------
 
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.bin                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
 	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="binary" ${<} ${@}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.hex                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf

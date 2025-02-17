@@ -7,7 +7,7 @@
 # =============================================================================
 
 define include 
-  $(shell ${GCC_PREFIX}cpp -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x" ${GCC_FLAGS} -I ${FIAT_KERNEL} -P ${FIAT_HOME}/src/fiat/target/kernel/kernel.conf | sed -e '/^[[:space:]]*$$/d' | envsubst)
+  $(shell cpp -I ${FIAT_KERNEL} -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x" ${GCC_DEFS} -P ${FIAT_HOME}/src/fiat/target/kernel/kernel.conf | sed -e '/^[[:space:]]*$$/d' | envsubst)
 endef
 
 EMPTY      :=
@@ -48,11 +48,13 @@ INCLUDES   += $(sort $(dir         $(call include)))
  OBJECTS   += $(addprefix ${FIAT_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.s, %.o, $(filter %.s, ${SOURCES}))))
  OBJECTS   += $(addprefix ${FIAT_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.S, %.o, $(filter %.S, ${SOURCES}))))
 
-GCC_FLAGS  += -DFIAT_VERSION_MAJOR="${FIAT_VERSION_MAJOR}"
-GCC_FLAGS  += -DFIAT_VERSION_MINOR="${FIAT_VERSION_MINOR}"
-GCC_FLAGS  += -DFIAT_VERSION_PATCH="${FIAT_VERSION_PATCH}" -DFIAT_DRIVER='"${FIAT_DRIVER}"' -DFIAT_BOARD='"${FIAT_BOARD}"' 
+GCC_FLAGS  +=
 GCC_PATHS  +=
 GCC_LIBS   +=
+
+GCC_DEFS   += -DFIAT_VERSION_MAJOR="${FIAT_VERSION_MAJOR}"
+GCC_DEFS   += -DFIAT_VERSION_MINOR="${FIAT_VERSION_MINOR}"
+GCC_DEFS   += -DFIAT_VERSION_PATCH="${FIAT_VERSION_PATCH}" -DFIAT_DRIVER='"${FIAT_DRIVER}"' -DFIAT_BOARD='"${FIAT_BOARD}"' 
 
 include ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/Makefile.in
 
@@ -95,6 +97,7 @@ debug    :
 	@echo "GCC_FLAGS  := ${GCC_FLAGS}"
 	@echo "GCC_PATHS  := ${GCC_PATHS}"
 	@echo "GCC_LIBS   := ${GCC_LIBS}"
+	@echo "GCC_DEFS   := ${GCC_DEFS}"
 
 build    :                      ${BUILD_PATHS} ${BUILD_FILES}
 

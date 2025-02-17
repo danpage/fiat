@@ -14,14 +14,14 @@ GCC_PREFIX  =
 GCC_FLAGS  +=
 # 1.  option-related => class 2: compiler
 GCC_FLAGS  +=
-# 1.  option-related => class 3:   linker
-GCC_FLAGS  +=
-# 1.  option-related => class 4: configuration (of HAL, BSP, etc.)
+# 1.  option-related => class 3: linker
 GCC_FLAGS  +=
 # 2.    path-related
 GCC_PATHS  +=
 # 3. library-related
 GCC_LIBS   +=
+# 4.  define-related (e.g., configuration of HAL, BSP, etc.)
+GCC_DEFS   +=
 
 # -----------------------------------------------------------------------------
 
@@ -36,13 +36,13 @@ clean-deps:
 # -----------------------------------------------------------------------------
 
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -c -o ${@} ${<}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 
 ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
 
 # =============================================================================

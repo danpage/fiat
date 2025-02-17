@@ -20,6 +20,7 @@ export FIAT_DEPS    ?= ${FIAT_BUILD/deps/${FIAT_BOARD}
 export GCC_FLAGS    ?=
 export GCC_PATHS    ?=
 export GCC_LIBS     ?=
+export GCC_DEFS     ?=
 
 # -----------------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ export DOCKER_FLAGS += --env FIAT_BUILD="/mnt/fiat_build"
 export DOCKER_FLAGS += --env GCC_FLAGS="${GCC_FLAGS}"
 export DOCKER_FLAGS += --env GCC_PATHS="${GCC_PATHS}"
 export DOCKER_FLAGS += --env GCC_LIBS="${GCC_LIBS}"
+export DOCKER_FLAGS += --env GCC_DEFS="${GCC_DEFS}"
 
 # =============================================================================
 
