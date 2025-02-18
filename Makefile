@@ -4,6 +4,23 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
+ifndef FIAT_HOME
+  $(error "FIAT_HOME"          " is undefined you may want to execute 'source ./bin/conf.sh' to configure environment")
+endif
+
+ifndef FIAT_VERSION_MAJOR
+  $(error "FIAT_VERSION_MAJOR" " is undefined you may want to execute 'source ./bin/conf.sh' to configure environment")
+endif
+ifndef FIAT_VERSION_MINOR
+  $(error "FIAT_VERSION_MINOR" " is undefined you may want to execute 'source ./bin/conf.sh' to configure environment")
+endif
+ifndef FIAT_VERSION_PATCH
+  $(error "FIAT_VERSION_PATCH" " is undefined you may want to execute 'source ./bin/conf.sh' to configure environment")
+endif
+ifndef FIAT_VERSION
+  $(error "FIAT_VERSION"       " is undefined you may want to execute 'source ./bin/conf.sh' to configure environment")
+endif
+
 # =============================================================================
 
 export FIAT_CONTEXT ?= native
@@ -17,36 +34,30 @@ export FIAT_DEPS    ?= ${FIAT_BUILD/deps/${FIAT_BOARD}
 
 # -----------------------------------------------------------------------------
 
-export GCC_FLAGS    ?=
-export GCC_PATHS    ?=
-export GCC_LIBS     ?=
-export GCC_DEFS     ?=
-
-# -----------------------------------------------------------------------------
-
 export DOCKER_IMAGE ?= danpage/fiat.$(subst /,-,${FIAT_BOARD})
 export DOCKER_TAG   ?= ${FIAT_VERSION}
 export DOCKER_FLAGS ?= 
+export DOCKER_ENV   ?= 
 
 export DOCKER_FLAGS += --volume "${FIAT_HOME}:/mnt/fiat_home" 
 export DOCKER_FLAGS += --volume "${FIAT_KERNEL}:/mnt/fiat_kernel" 
 export DOCKER_FLAGS += --volume "${FIAT_BUILD}:/mnt/fiat_build"
 
-export DOCKER_FLAGS += --env DOCKER_GID="$(shell id --group)" 
-export DOCKER_FLAGS += --env DOCKER_UID="$(shell id --user )" 
+export DOCKER_ENV   += --env DOCKER_GID="$(shell id --group)" 
+export DOCKER_ENV   += --env DOCKER_UID="$(shell id --user )" 
 
-export DOCKER_FLAGS += --env FIAT_CONTEXT="native"
-export DOCKER_FLAGS += --env FIAT_DRIVER="${FIAT_DRIVER}"
-export DOCKER_FLAGS += --env FIAT_BOARD="${FIAT_BOARD}" 
+export DOCKER_ENV   += --env FIAT_CONTEXT="native"
+export DOCKER_ENV   += --env FIAT_DRIVER="${FIAT_DRIVER}"
+export DOCKER_ENV   += --env FIAT_BOARD="${FIAT_BOARD}" 
 
-export DOCKER_FLAGS += --env FIAT_HOME="/mnt/fiat_home"
-export DOCKER_FLAGS += --env FIAT_KERNEL="/mnt/fiat_kernel"
-export DOCKER_FLAGS += --env FIAT_BUILD="/mnt/fiat_build"
+export DOCKER_ENV   += --env FIAT_HOME="/mnt/fiat_home"
+export DOCKER_ENV   += --env FIAT_KERNEL="/mnt/fiat_kernel"
+export DOCKER_ENV   += --env FIAT_BUILD="/mnt/fiat_build"
 
-export DOCKER_FLAGS += --env GCC_FLAGS="${GCC_FLAGS}"
-export DOCKER_FLAGS += --env GCC_PATHS="${GCC_PATHS}"
-export DOCKER_FLAGS += --env GCC_LIBS="${GCC_LIBS}"
-export DOCKER_FLAGS += --env GCC_DEFS="${GCC_DEFS}"
+export DOCKER_ENV   += --env GCC_FLAGS
+export DOCKER_ENV   += --env GCC_PATHS
+export DOCKER_ENV   += --env GCC_LIBS
+export DOCKER_ENV   += --env GCC_DEFS
 
 # =============================================================================
 
@@ -65,7 +76,7 @@ export DOCKER_FLAGS += --env GCC_DEFS="${GCC_DEFS}"
 
 ifeq "${FIAT_CONTEXT}" "docker"
 % :
-	@docker run --rm ${DOCKER_FLAGS} ${DOCKER_IMAGE}:${DOCKER_TAG} ${*}
+	@docker run --rm ${DOCKER_FLAGS} ${DOCKER_ENV} ${DOCKER_IMAGE}:${DOCKER_TAG} ${*}
 endif
 
 # -----------------------------------------------------------------------------

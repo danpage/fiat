@@ -84,9 +84,7 @@ noting that:
   - index `0x80 = 128`, i.e., SPR address `0x00 = 0`
     is called `ret`: this is an RO register used for a return code,
   - index `0x81 = 129`, i.e., SPR address `0x01 = 1`
-    is called `tsc`: this is an RO register used for a time-stamp counter,
-  - index `0x82 = 130`, i.e., SPR address `0x02 = 2`
-    is called `rnd`: this is an WO register used for   externally supplied randomness.
+    is called `tsc`: this is an RO register used for a time-stamp counter.
 
 ### API
 
