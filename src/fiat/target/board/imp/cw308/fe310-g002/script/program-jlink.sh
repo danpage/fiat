@@ -7,7 +7,7 @@
 # as LICENSE.txt within the associated archive or repository).
 
 TRANSPORT="jtag"
-CONFIG="${FIAT_HOME}/src/fiat/target/board/imp/cw308/fe310-g002/script/fe310-g002.cfg"
+CONFIG="${FIAT_PATH_REPO}/src/fiat/target/board/imp/cw308/fe310-g002/script/fe310-g002.cfg"
 
 openocd --file    "interface/jlink.cfg"           \
         --command "transport select ${TRANSPORT}" \

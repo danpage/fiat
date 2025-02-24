@@ -14,22 +14,22 @@ is comprised of
    captured by
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/kernel/kernel.h
-   ${FIAT_HOME}/src/fiat/target/kernel/kernel.c
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/kernel.h
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/kernel.c
    ```
 
 2. a  concrete implementation
    captured by
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
-   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.h
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.c
    ```
 
    plus associated configuration
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.conf
    ```
 
 noting that:
@@ -402,23 +402,23 @@ is comprised of
    captured by
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/board/board.h
-   ${FIAT_HOME}/src/fiat/target/board/board.c
+   ${FIAT_PATH_REPO}/src/fiat/target/board/board.h
+   ${FIAT_PATH_REPO}/src/fiat/target/board/board.c
    ```
 
 2. a  concrete implementation
    captured by
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/board/imp/board_imp.h
-   ${FIAT_HOME}/src/fiat/target/board/imp/board_imp.c
+   ${FIAT_PATH_REPO}/src/fiat/target/board/imp/board_imp.h
+   ${FIAT_PATH_REPO}/src/fiat/target/board/imp/board_imp.c
    ```
 
    plus associated configuration
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/board/imp/Dockerfile.in
-   ${FIAT_HOME}/src/fiat/target/board/imp/Makefile.in
+   ${FIAT_PATH_REPO}/src/fiat/target/board/imp/Dockerfile.in
+   ${FIAT_PATH_REPO}/src/fiat/target/board/imp/Makefile.in
    ```
 
 noting that

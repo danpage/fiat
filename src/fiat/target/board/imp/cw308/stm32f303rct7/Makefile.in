@@ -6,21 +6,22 @@
 
 # =============================================================================
 
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS/core
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS/device
-INCLUDES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/Legacy
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS/core
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/CMSIS/device
+INCLUDES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/Legacy
 
- SOURCES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_startup.S
- SOURCES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_sysmem.c
- SOURCES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_hal.c 
- SOURCES   += ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_hal_lowlevel.c 
+ SOURCES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_startup.S
+ SOURCES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_sysmem.c
+ SOURCES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_hal.c 
+ SOURCES   += ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/stm32f3_hal_lowlevel.c 
 
- TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.elf 
- TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.bin 
- TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.hex
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.elf
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.map
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.bin
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.hex
 
 GCC_PREFIX  = arm-none-eabi-
 
@@ -29,7 +30,7 @@ GCC_FLAGS  += -mcpu="cortex-m4" -mthumb -mfloat-abi="soft"
 # 1.  option-related => class 2: compiler
 GCC_FLAGS  += -Os -Wall -std="gnu11" -ffreestanding -funsigned-char -funsigned-bitfields -fshort-enums -fvisibility="hidden" -ffunction-sections
 # 1.  option-related => class 3:   linker
-GCC_FLAGS  += -T ${FIAT_DEPS}/chipwhisperer/firmware/mcu/hal/stm32f3/LinkerScript.ld --specs="nano.specs" --specs="nosys.specs" 
+GCC_FLAGS  += -T ${FIAT_PATH_DEP}/chipwhisperer/firmware/mcu/hal/stm32f3/LinkerScript.ld --specs="nano.specs" --specs="nosys.specs" 
 # 2.    path-related
 GCC_PATHS  +=
 # 3. library-related
@@ -39,37 +40,37 @@ GCC_DEFS   += -DPLATFORM="CW308_STM32F3" -DHAL_TYPE="HAL_stm32f3" -DSS_VER="1" -
 
 # -----------------------------------------------------------------------------
 
-fetch-deps :
-	@git clone https://github.com/newaetech/chipwhisperer.git ${FIAT_DEPS}/chipwhisperer
-	@git -C ${FIAT_DEPS}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
-	@git -C ${FIAT_DEPS}/chipwhisperer submodule update --init --recursive
+fetch-dep :
+	@git clone https://github.com/newaetech/chipwhisperer.git ${FIAT_PATH_DEP}/chipwhisperer
+	@git -C ${FIAT_PATH_DEP}/chipwhisperer checkout d38eae52080fab801624e905046a5ee042da560f
+	@git -C ${FIAT_PATH_DEP}/chipwhisperer submodule update --init --recursive
 
-patch-deps :
+patch-dep :
 
-build-deps :
+build-dep :
 
-clean-deps : 
-	@rm --force --recursive ${FIAT_DEPS}
+clean-dep : 
+	@rm --force --recursive ${FIAT_PATH_DEP}
 
 # -----------------------------------------------------------------------------
 
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.c
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.s
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.S
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.bin                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
-	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="binary" ${<} ${@}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.hex                                          : ${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf
-	@${GCC_PREFIX}objcopy ${OBJCOPY_FLAGS} --output-target="ihex"   ${<} ${@}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.bin                                               : ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.elf
+	@${GCC_PREFIX}objcopy --gap-fill="0" --output-target="binary" ${<} ${@}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.hex                                               : ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.elf
+	@${GCC_PREFIX}objcopy --gap-fill="0" --output-target="ihex"   ${<} ${@}
 
 # -----------------------------------------------------------------------------
 
 program-jlink :
-	@${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/script/program-jlink.sh $(filter %.hex, ${TARGETS})
+	@${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}/script/program-jlink.sh $(filter %.hex, ${TARGETS})
 
 # =============================================================================

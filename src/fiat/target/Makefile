@@ -6,57 +6,73 @@
 
 # =============================================================================
 
-define include 
-  $(shell cpp -I ${FIAT_KERNEL} -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x" ${GCC_DEFS} -P ${FIAT_HOME}/src/fiat/target/kernel/kernel.conf | sed -e '/^[[:space:]]*$$/d' | envsubst)
-endef
-
 EMPTY      :=
 SPACE      := ${EMPTY} ${EMPTY}
 COLON      := :
 
 # -----------------------------------------------------------------------------
 
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/share
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/share/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/share/*.[csS])
+INCLUDE := -D"DECLARE_SPR(...)=" -D"DECLARE_GPR(...)=" -D"DECLARE_CMD(...)=" -D"INCLUDE(x)=x"
 
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/board
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/board/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/board/*.[csS])
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/*.[csS])
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/fiat.conf : ${FIAT_PATH_REPO}/src/fiat/target/kernel/kernel.conf
+	@mkdir --parents ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS}            -P - | sed -e '/^[[:space:]]*$$/d' | envsubst                                                                    > ${@}
 
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/driver
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/driver/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/driver/*.[csS])
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/driver/imp/${FIAT_DRIVER}
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/driver/imp/${FIAT_DRIVER}/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/driver/imp/${FIAT_DRIVER}/*.[csS])
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/fiat.mk   : ${FIAT_PATH_REPO}/src/fiat/target/kernel/kernel.conf
+	@mkdir --parents ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS} ${INCLUDE} -P - | sed -e '/^[[:space:]]*$$/d' | envsubst | xargs --no-run-if-empty -- dirname | sed -e 's/^/INCLUDES += /'  > ${@}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS} ${INCLUDE} -P - | sed -e '/^[[:space:]]*$$/d' | envsubst | grep '.*\.h'                       | sed -e 's/^/ HEADERS += /' >> ${@}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS} ${INCLUDE} -P - | sed -e '/^[[:space:]]*$$/d' | envsubst | grep '.*\.c'                       | sed -e 's/^/ SOURCES += /' >> ${@}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS} ${INCLUDE} -P - | sed -e '/^[[:space:]]*$$/d' | envsubst | grep '.*\.s'                       | sed -e 's/^/ SOURCES += /' >> ${@}
+	@cat ${<} | cpp -I ${FIAT_PATH_IMP} ${GCC_DEFS} ${INCLUDE} -P - | sed -e '/^[[:space:]]*$$/d' | envsubst | grep '.*\.S'                       | sed -e 's/^/ SOURCES += /' >> ${@}
 
-INCLUDES   +=             ${FIAT_HOME}/src/fiat/target/kernel
- HEADERS   += $(wildcard  ${FIAT_HOME}/src/fiat/target/kernel/*.[h])
- SOURCES   += $(wildcard  ${FIAT_HOME}/src/fiat/target/kernel/*.[csS])
+-include ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/fiat.mk
 
-INCLUDES   += $(sort $(dir         $(call include)))
- HEADERS   += $(sort $(filter %.h, $(call include)))
- SOURCES   += $(sort $(filter %.c, $(call include)))
- SOURCES   += $(sort $(filter %.s, $(call include)))
- SOURCES   += $(sort $(filter %.S, $(call include)))
+# -----------------------------------------------------------------------------
 
- OBJECTS   += $(addprefix ${FIAT_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.c, %.o, $(filter %.c, ${SOURCES}))))
- OBJECTS   += $(addprefix ${FIAT_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.s, %.o, $(filter %.s, ${SOURCES}))))
- OBJECTS   += $(addprefix ${FIAT_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.S, %.o, $(filter %.S, ${SOURCES}))))
+INCLUDES   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}
+ HEADERS   += 
+ SOURCES   += 
+
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/share
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/share/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/share/*.[csS])
+
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/board
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/board/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/board/*.[csS])
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}/*.[csS])
+
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/driver
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/driver/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/driver/*.[csS])
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/driver/imp/${FIAT_DRIVER}
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/driver/imp/${FIAT_DRIVER}/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/driver/imp/${FIAT_DRIVER}/*.[csS])
+
+INCLUDES   +=             ${FIAT_PATH_REPO}/src/fiat/target/kernel
+ HEADERS   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/kernel/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_REPO}/src/fiat/target/kernel/*.[csS])
+
+INCLUDES   +=             ${FIAT_PATH_IMP}
+ HEADERS   += $(wildcard  ${FIAT_PATH_IMP}/*.[h])
+ SOURCES   += $(wildcard  ${FIAT_PATH_IMP}/*.[csS])
+
+ OBJECTS   += $(addprefix ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.c, %.o, $(filter %.c, ${SOURCES}))))
+ OBJECTS   += $(addprefix ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.s, %.o, $(filter %.s, ${SOURCES}))))
+ OBJECTS   += $(addprefix ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/, $(notdir $(patsubst %.S, %.o, $(filter %.S, ${SOURCES}))))
 
 GCC_FLAGS  +=
-GCC_PATHS  +=
+GCC_PATHS  += $(patsubst %, -I %, ${INCLUDES})
 GCC_LIBS   +=
 
 GCC_DEFS   += -DFIAT_VERSION_MAJOR="${FIAT_VERSION_MAJOR}"
 GCC_DEFS   += -DFIAT_VERSION_MINOR="${FIAT_VERSION_MINOR}"
-GCC_DEFS   += -DFIAT_VERSION_PATCH="${FIAT_VERSION_PATCH}" -DFIAT_DRIVER='"${FIAT_DRIVER}"' -DFIAT_BOARD='"${FIAT_BOARD}"' 
+GCC_DEFS   += -DFIAT_VERSION_PATCH="${FIAT_VERSION_PATCH}" -DFIAT_CONTEXT='"${FIAT_CONTEXT}"' -DFIAT_DRIVER='"${FIAT_DRIVER}"' -DFIAT_BOARD='"${FIAT_BOARD}"'
 
-include ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/Makefile.in
+-include ${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}/Makefile.in
 
 vpath %.h $(subst ${SPACE},${COLON},${INCLUDES})
 vpath %.c $(subst ${SPACE},${COLON},${INCLUDES})
@@ -65,43 +81,43 @@ vpath %.S $(subst ${SPACE},${COLON},${INCLUDES})
 
 # =============================================================================
 
-# Construct a definitive list of built files, plus their associated paths
-# to allow pre-creation of an appropriate directory structure (note that
-# use of sort is required to remove duplicates). 
-
-BUILD_FILES  = ${OBJECTS}
+BUILD_FILES += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/fiat.conf
+BUILD_FILES += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/fiat.mk
+BUILD_FILES += ${OBJECTS}
 BUILD_FILES += ${TARGETS}
 
-BUILD_PATHS  = $(sort $(foreach FILE,${BUILD_FILES},$(dir ${FILE})))
-
-# Define targets for built files not otherwise catered for.
+BUILD_PATHS += $(sort $(foreach FILE,${BUILD_FILES},$(dir ${FILE})))
 
 ${BUILD_PATHS} :
 	@mkdir --parents ${@}
 
-${CLEAN_PATHS} :
-	@rm --force --recursive ${@}
-
 # -----------------------------------------------------------------------------
 
-# Define targets to drive build process.
+debug :	
+	@echo "FIAT_CONTEXT    := ${FIAT_CONTEXT}"
+	@echo "FIAT_DRIVER     := ${FIAT_DRIVER}"
+	@echo "FIAT_BOARD      := ${FIAT_BOARD}"
 
-debug    :
-	@echo "INCLUDES   := ${INCLUDES}"
-	@echo "SOURCES    := ${SOURCES}"
-	@echo "HEADERS    := ${HEADERS}"
-	@echo "OBJECTS    := ${OBJECTS}"
-	@echo "TARGETS    := ${TARGETS}"
+	@echo "FIAT_PATH_REPO  := ${FIAT_PATH_REPO}"
+	@echo "FIAT_PATH_IMP   := ${FIAT_PATH_IMP}"
+	@echo "FIAT_PATH_BUILD := ${FIAT_PATH_BUILD}"
+	@echo "FIAT_PATH_DEP   := ${FIAT_PATH_DEP}"
 
-	@echo "GCC_PREFIX := ${GCC_PREFIX}"
-	@echo "GCC_FLAGS  := ${GCC_FLAGS}"
-	@echo "GCC_PATHS  := ${GCC_PATHS}"
-	@echo "GCC_LIBS   := ${GCC_LIBS}"
-	@echo "GCC_DEFS   := ${GCC_DEFS}"
+	@echo "INCLUDES        := ${INCLUDES}"
+	@echo "SOURCES         := ${SOURCES}"
+	@echo "HEADERS         := ${HEADERS}"
+	@echo "OBJECTS         := ${OBJECTS}"
+	@echo "TARGETS         := ${TARGETS}"
 
-build    :                      ${BUILD_PATHS} ${BUILD_FILES}
+	@echo "GCC_PREFIX      := ${GCC_PREFIX}"
+	@echo "GCC_FLAGS       := ${GCC_FLAGS}"
+	@echo "GCC_PATHS       := ${GCC_PATHS}"
+	@echo "GCC_LIBS        := ${GCC_LIBS}"
+	@echo "GCC_DEFS        := ${GCC_DEFS}"
 
-clean    :
+build :                         ${BUILD_PATHS} ${BUILD_FILES}
+
+clean :
 	@rm --force --recursive ${BUILD_PATHS}
 
 # =============================================================================

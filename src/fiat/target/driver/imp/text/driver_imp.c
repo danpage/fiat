@@ -357,7 +357,7 @@ void driver_interact() {
       #define DECLARE_GPR(x,y,z,...)
       #define DECLARE_CMD(x,y      ) case x: { y( &driver_ctx ); f = true; break; }
       #define INCLUDE(x) 
-      #include "kernel.conf"
+      #include "fiat.conf"
       #undef  DECLARE_SPR
       #undef  DECLARE_GPR
       #undef  DECLARE_CMD

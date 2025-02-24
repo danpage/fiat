@@ -8,16 +8,16 @@
 
 # =============================================================================
 
-if [ -z "${FIAT_HOME}" ] ; then
-  echo "execute 'source ./bin/conf.sh' to configure environment" ; exit
+if [ -z "${FIAT_PATH_REPO}" ] ; then
+  echo "FIAT_PATH_REPO"     " is undefined: you may want to execute 'source ./bin/conf.sh' to configure environment" ; exit
 fi
 
 # -----------------------------------------------------------------------------
 
-FIAT_BOARDS=$(find ${FIAT_HOME}/src/fiat/target/board/imp -type f -name Makefile.in | sed -e "s|${FIAT_HOME}/src/fiat/target/board/imp/\(.*\)/Makefile.in|\1|")
+FIAT_BOARDS=$(find ${FIAT_PATH_REPO}/src/fiat/target/board/imp -type f -name Makefile.in | sed -e "s|${FIAT_PATH_REPO}/src/fiat/target/board/imp/\(.*\)/Makefile.in|\1|")
 
 for FIAT_BOARD in ${FIAT_BOARDS} ; do
-  FIAT_CONTEXT="native" FIAT_BOARD="${FIAT_BOARD}" make -f ${FIAT_HOME}/Makefile docker/${1}
+  FIAT_CONTEXT="native" FIAT_BOARD="${FIAT_BOARD}" make -f ${FIAT_PATH_REPO}/Makefile docker/${1}
 done
 
 # =============================================================================

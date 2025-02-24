@@ -1,0 +1,38 @@
+# Copyright (C) 2024 Daniel Page <dan@phoo.org>
+#
+# Use of this source code is restricted per the MIT license, a copy of which 
+# can be found via https://opensource.org/license/mit (and which is included 
+# as LICENSE.txt within the associated archive or repository).
+
+# =============================================================================
+
+export DOCKER_FLAGS    += --volume "${FIAT_PATH_REPO}:/mnt/fiat_repo" 
+export DOCKER_FLAGS    += --volume "${FIAT_PATH_IMP}:/mnt/fiat_imp"
+export DOCKER_FLAGS    += --volume "${FIAT_PATH_BUILD}:/mnt/fiat_build"
+export DOCKER_FLAGS    += --volume "${FIAT_PATH_DEP}:/mnt/fiat_dep/${FIAT_BOARD}"
+
+export DOCKER_DEFS     += --env DOCKER_GID="$(shell id --group)" 
+export DOCKER_DEFS     += --env DOCKER_UID="$(shell id --user )" 
+
+export DOCKER_DEFS     += --env       DATE="$(shell date -u +'%d/%m/%Y-%H:%M:%SZ')" 
+
+export DOCKER_DEFS     += --env       FIAT_CONTEXT="native"
+export DOCKER_DEFS     += --env       FIAT_DRIVER="${FIAT_DRIVER}"
+export DOCKER_DEFS     += --env       FIAT_BOARD="${FIAT_BOARD}" 
+
+export DOCKER_DEFS     += --env       FIAT_PATH_REPO="/mnt/fiat_repo"
+export DOCKER_DEFS     += --env       FIAT_PATH_IMP="/mnt/fiat_imp"
+export DOCKER_DEFS     += --env       FIAT_PATH_BUILD="/mnt/fiat_build"
+export DOCKER_DEFS     += --env       FIAT_PATH_DEP="/opt/fiat_dep/${FIAT_BOARD}"
+
+export DOCKER_DEFS     += --env GCC_FLAGS
+export DOCKER_DEFS     += --env GCC_PATHS
+export DOCKER_DEFS     += --env GCC_LIBS
+export DOCKER_DEFS     += --env GCC_DEFS
+
+# =============================================================================
+
+% :
+	@docker run --rm ${DOCKER_FLAGS} ${DOCKER_DEFS} ${DOCKER_IMAGE}:${DOCKER_TAG} ${*}
+
+# =============================================================================

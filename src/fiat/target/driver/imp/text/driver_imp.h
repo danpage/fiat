@@ -29,7 +29,7 @@ typedef struct {
 #define DECLARE_GPR(x,y,z,...)
 #define DECLARE_CMD(x,y      ) extern void y( driver_ctx_t* ctx );
 #define INCLUDE(x) 
-#include "kernel.conf"
+#include "fiat.conf"
 #undef  DECLARE_SPR
 #undef  DECLARE_GPR
 #undef  DECLARE_CMD

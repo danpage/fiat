@@ -29,7 +29,7 @@ implementations.
    by editing
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.conf
    ```
 
    In particular,
@@ -53,7 +53,7 @@ implementations.
    by editing
 
    ```sh
-   ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+   ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.c
    ```
 
    In particular,
@@ -104,7 +104,7 @@ To drive interaction with the target implementation, we use an example
 client implementation located in
 
 ```sh
-${FIAT_HOME}/src/fiat/client/script/example.py
+${FIAT_PATH_REPO}/src/fiat/client/script/example.py
 ```
 
 whose core functionality is captured by the following fragment:
@@ -153,7 +153,7 @@ Now we can execute the target and client, and interaction between them:
   execute
 
   ```sh
-  ncat --verbose --listen --source-port 1234 --hex-dump ${FIAT_HOME}/build/target/native/target.ncat --exec ${FIAT_HOME}/build/target/native/target.elf
+  ncat --verbose --listen --source-port 1234 --hex-dump ${FIAT_PATH_REPO}/build/target/native/target.ncat --exec ${FIAT_PATH_REPO}/build/target/native/target.elf
   ```
 
   Doing so uses 
@@ -166,7 +166,7 @@ Now we can execute the target and client, and interaction between them:
   we can connect to.  Notice that use of 
   `--hex-dump`
   means that all communicated data will be captured in the file
-  `${FIAT_HOME}/build/target/native/target.ncat`
+  `${FIAT_PATH_REPO}/build/target/native/target.ncat`
 
 - In terminal 2, 
   install
@@ -181,14 +181,14 @@ Now we can execute the target and client, and interaction between them:
   execute
 
   ```sh
-  python3 ${FIAT_HOME}/src/fiat/client/script/example.py --device='socket' --driver='binary' --host='127.0.0.1' --port='1234' --seed='0'
+  python3 ${FIAT_PATH_REPO}/src/fiat/client/script/example.py --device='socket' --driver='binary' --host='127.0.0.1' --port='1234' --seed='0'
   ```
 
   to use the `binary` driver,
   *or*
 
   ```sh
-  python3 ${FIAT_HOME}/src/fiat/client/script/example.py --device='socket' --driver='text'   --host='127.0.0.1' --port='1234' --seed='0'
+  python3 ${FIAT_PATH_REPO}/src/fiat/client/script/example.py --device='socket' --driver='text'   --host='127.0.0.1' --port='1234' --seed='0'
   ```
 
   to use the `text`   driver.
@@ -232,7 +232,7 @@ received from the target implementation matches the
 we compute locally: this demonstrates it is operating as expected.
 
 - From use of the `binary` driver,
-  `${FIAT_HOME}/build/target/native/target.ncat`
+  `${FIAT_PATH_REPO}/build/target/native/target.ncat`
   reads as follows:
 
   ```
@@ -280,7 +280,7 @@ we compute locally: this demonstrates it is operating as expected.
   ```
 
 - From use of the `text`   driver,
-  `${FIAT_HOME}/build/target/native/target.ncat`
+  `${FIAT_PATH_REPO}/build/target/native/target.ncat`
   reads as follows:
 
   ```

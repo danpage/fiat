@@ -9,7 +9,15 @@
 FROM ubuntu
 
 ARG DATE
+
+ARG FIAT_CONTEXT
+ARG FIAT_DRIVER
 ARG FIAT_BOARD
+
+ARG FIAT_PATH_REPO
+ARG FIAT_PATH_IMP
+ARG FIAT_PATH_BUILD
+ARG FIAT_PATH_DEP
 
 LABEL maintainer="Daniel Page <dan@phoo.org>" url="https://github.com/danpage/fiat" date="${DATE}" 
 
@@ -22,15 +30,14 @@ RUN apt-get --assume-yes --quiet update \
 
 # -----------------------------------------------------------------------------
 
-ENV FIAT_DEPS="/opt/fiat_deps/${FIAT_BOARD}"
-RUN mkdir --parents ${FIAT_DEPS}
+RUN mkdir --parents ${FIAT_PATH_DEP}
 
 include(`Dockerfile.in')
 
-COPY Makefile ${FIAT_DEPS}/Makefile
-RUN make --directory="${FIAT_DEPS}" fetch-deps \
- && make --directory="${FIAT_DEPS}" patch-deps \
- && make --directory="${FIAT_DEPS}" build-deps
+COPY Makefile ${FIAT_PATH_DEP}/Makefile
+RUN make --directory="${FIAT_PATH_DEP}" fetch-dep \
+ && make --directory="${FIAT_PATH_DEP}" patch-dep \
+ && make --directory="${FIAT_PATH_DEP}" build-dep
 
 # -----------------------------------------------------------------------------
 

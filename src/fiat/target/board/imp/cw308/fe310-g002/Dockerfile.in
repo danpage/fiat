@@ -7,9 +7,9 @@
 # =============================================================================
 
 RUN wget --quiet --output-document="riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz" https://static.dev.sifive.com/dev-tools/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz \
- && tar --extract --directory ${FIAT_DEPS} --file ./riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz \
+ && tar --extract --directory ${FIAT_PATH_DEP} --file ./riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz \
  && rm --force ./riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14.tar.gz
 
-ENV PATH "${PATH}:${FIAT_DEPS}/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14/bin"
+ENV PATH "${PATH}:${FIAT_PATH_DEP}/riscv64-unknown-elf-gcc-8.2.0-2019.05.3-x86_64-linux-ubuntu14/bin"
 
 # =============================================================================

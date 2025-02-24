@@ -1,0 +1,28 @@
+# Copyright (C) 2024 Daniel Page <dan@phoo.org>
+#
+# Use of this source code is restricted per the MIT license, a copy of which 
+# can be found via https://opensource.org/license/mit (and which is included 
+# as LICENSE.txt within the associated archive or repository).
+
+# =============================================================================
+
+   doc/%     :
+	@make --directory="${FIAT_PATH_REPO}/doc"             ${*}
+docker/%     :
+	@make --directory="${FIAT_PATH_REPO}/src/docker"      ${*}
+client/%     :
+	@make --directory="${FIAT_PATH_REPO}/src/fiat/client" ${*}
+target/%     :
+	@make --directory="${FIAT_PATH_REPO}/src/fiat/target" ${*}
+
+  venv/build : ${FIAT_PATH_REPO}/requirements.txt
+	@${FIAT_PATH_REPO}/bin/venv.sh ${<}
+  venv/clean : ${FIAT_PATH_REPO}/requirements.txt
+	@rm --force --recursive ${FIAT_PATH_BUILD}/venv
+
+clean        : 
+
+spotless     : clean
+	@rm --force --recursive ${FIAT_PATH_BUILD}/*
+
+# =============================================================================

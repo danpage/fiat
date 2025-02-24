@@ -6,7 +6,8 @@
 
 # =============================================================================
 
- TARGETS   += ${FIAT_BUILD}/target/${FIAT_BOARD}/target.elf
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.elf
+ TARGETS   += ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/target.map
 
 GCC_PREFIX  =
 
@@ -25,24 +26,24 @@ GCC_DEFS   +=
 
 # -----------------------------------------------------------------------------
 
-fetch-deps :
+fetch-dep :
 
-patch-deps :
+patch-dep :
 
-build-deps :
+build-dep :
 
-clean-deps: 
+clean-dep: 
 
 # -----------------------------------------------------------------------------
 
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.c
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.s
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.o : %.S
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.c
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.s
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.o : %.S
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -c -o ${@} ${<}
 
-${FIAT_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
-	@${GCC_PREFIX}gcc $(patsubst %, -I %, ${INCLUDES}) ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
+${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.elf ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/%.map : ${OBJECTS}
+	@${GCC_PREFIX}gcc ${GCC_PATHS} ${GCC_FLAGS} ${GCC_DEFS} -Wl,-Map="${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/${*}.map" -o ${FIAT_PATH_BUILD}/target/${FIAT_BOARD}/${*}.elf ${^} ${GCC_LIBS}
 
 # =============================================================================

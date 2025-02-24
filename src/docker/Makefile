@@ -6,34 +6,46 @@
 
 # =============================================================================
 
-${FIAT_BUILD}/docker/${FIAT_BOARD}/Makefile      : ${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}/Makefile.in
-	@m4 --include="${FIAT_HOME}/src/docker" --include="${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
-${FIAT_BUILD}/docker/${FIAT_BOARD}/Dockerfile    : ${FIAT_HOME}/src/docker/Dockerfile
-	@m4 --include="${FIAT_HOME}/src/docker" --include="${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
-${FIAT_BUILD}/docker/${FIAT_BOARD}/entrypoint.sh : ${FIAT_HOME}/src/docker/entrypoint.sh
-	@m4 --include="${FIAT_HOME}/src/docker" --include="${FIAT_HOME}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
+export DOCKER_FLAGS    += 
+
+export DOCKER_DEFS     += --build-arg DATE="$(shell date -u +'%d/%m/%Y-%H:%M:%SZ')" 
+
+export DOCKER_DEFS     += --build-arg FIAT_CONTEXT="native"
+export DOCKER_DEFS     += --build-arg FIAT_DRIVER="${FIAT_DRIVER}"
+export DOCKER_DEFS     += --build-arg FIAT_BOARD="${FIAT_BOARD}"
+
+export DOCKER_DEFS     += --build-arg FIAT_PATH_REPO="/mnt/fiat_home"
+export DOCKER_DEFS     += --build-arg FIAT_PATH_IMP="/mnt/fiat_imp"
+export DOCKER_DEFS     += --build-arg FIAT_PATH_BUILD="/mnt/fiat_build"
+export DOCKER_DEFS     += --build-arg FIAT_PATH_DEP="/opt/fiat_dep/${FIAT_BOARD}"
 
 # =============================================================================
 
-BUILD_FILES  = ${FIAT_BUILD}/docker/${FIAT_BOARD}/Makefile
-BUILD_FILES += ${FIAT_BUILD}/docker/${FIAT_BOARD}/Dockerfile
-BUILD_FILES += ${FIAT_BUILD}/docker/${FIAT_BOARD}/entrypoint.sh
+${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/Makefile      : ${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}/Makefile.in
+	@m4 --include="${FIAT_PATH_REPO}/src/docker" --include="${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
+${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/Dockerfile    : ${FIAT_PATH_REPO}/src/docker/Dockerfile
+	@m4 --include="${FIAT_PATH_REPO}/src/docker" --include="${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
+${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/entrypoint.sh : ${FIAT_PATH_REPO}/src/docker/entrypoint.sh
+	@m4 --include="${FIAT_PATH_REPO}/src/docker" --include="${FIAT_PATH_REPO}/src/fiat/target/board/imp/${FIAT_BOARD}" ${<} > ${@}
 
-BUILD_PATHS  = ${FIAT_BUILD}/docker/${FIAT_BOARD}
+# -----------------------------------------------------------------------------
+
+BUILD_FILES += ${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/Makefile
+BUILD_FILES += ${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/Dockerfile
+BUILD_FILES += ${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}/entrypoint.sh
+
+BUILD_PATHS += ${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}
 
 ${BUILD_PATHS} :
 	@mkdir --parents ${@}
 
-${CLEAN_PATHS} :
-	@rm --force --recursive ${@}
-
 # -----------------------------------------------------------------------------
 
-build : ${BUILD_PATHS} ${BUILD_FILES}
-	@docker build --tag ${DOCKER_IMAGE}:${DOCKER_TAG} --build-arg DATE="$(shell date -u +'%d/%m/%Y-%H:%M:%SZ')" --build-arg FIAT_BOARD="${FIAT_BOARD}" ${FIAT_BUILD}/docker/${FIAT_BOARD}
+build :                         ${BUILD_PATHS} ${BUILD_FILES}
+	@docker build --tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_FLAGS} ${DOCKER_DEFS} ${FIAT_PATH_BUILD}/docker/${FIAT_BOARD}
 
-clean : ${CLEAN_PATHS}
-	@docker images | grep ${DOCKER_IMAGE} | grep ${DOCKER_TAG} | tr --squeeze-repeats ' ' | cut --delimiter=' ' --fields=3 | uniq | xargs --no-run-if-empty docker rmi --force && rm --force --recursive ${BUILD_PATHS}
+clean :
+	@rm --force --recursive ${BUILD_PATHS}
 
 push  :
 	@docker push ${DOCKER_IMAGE}:${DOCKER_TAG}

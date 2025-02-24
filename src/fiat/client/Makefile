@@ -6,20 +6,18 @@
 
 # =============================================================================
 
-.PHONY: build
-
 build        :
-	@hatch build   --clean     ${FIAT_BUILD}/client
+	@hatch build   --clean     ${FIAT_PATH_BUILD}/client
 
 publish      :
-	@hatch publish --repo main ${FIAT_BUILD}/client
+	@hatch publish --repo main ${FIAT_PATH_BUILD}/client
 publish-test :
-	@hatch publish --repo test ${FIAT_BUILD}/client
+	@hatch publish --repo test ${FIAT_PATH_BUILD}/client
 
 clean        :
 	@hatch clean
 
 spotless     :
-	@rm --force --recursive ${FIAT_BUILD}/client
+	@rm --force --recursive ${FIAT_PATH_BUILD}/client
 
 # =============================================================================

@@ -4,24 +4,24 @@
 
 ## Overview
 
-`${FIAT_HOME}/Makefile` can be used to drive the build process, e.g., via
+`${FIAT_PATH_REPO}/Makefile` can be used to drive the build process, e.g., via
 
-| Command                  | Description                                                    |
-|:-------------------------|:---------------------------------------------------------------|
-| `make   venv/clean`      | clean                  the Python virtual environment          |
-| `make   venv/build`      | build                  the Python virtual environment          |
-| `make docker/clean`      | clean [Docker](https://www.docker.com)-based container         |
-| `make docker/build`      | build [Docker](https://www.docker.com)-based container         |
-| `make    doc/clean`      | clean [Sphinx](https://www.sphinx-doc.org)-based documentation |
-| `make    doc/build`      | build [Sphinx](https://www.sphinx-doc.org)-based documentation |
-| `make target/clean`      | clean                  the target implementation               |
-| `make target/build`      | build                  the target implementation               |
-| `make target/fetch-deps` | fetch (i.e., download) the target implementation dependencies  |
-| `make target/patch-deps` | patch                  the target implementation dependencies  |
-| `make target/build-deps` | build                  the target implementation dependencies  |
-| `make target/clean-deps` | clean                  the target implementation dependencies  |
-| `make clean`             |  selectively remove artefacts produced by the build system     |
-| `make spotless`          | aggressively remove artefacts produced by the build system     |
+| Command                 | Description                                                    |
+|:------------------------|:---------------------------------------------------------------|
+| `make   venv/clean`     | clean                  the Python virtual environment          |
+| `make   venv/build`     | build                  the Python virtual environment          |
+| `make docker/clean`     | clean [Docker](https://www.docker.com)-based container         |
+| `make docker/build`     | build [Docker](https://www.docker.com)-based container         |
+| `make    doc/clean`     | clean [Sphinx](https://www.sphinx-doc.org)-based documentation |
+| `make    doc/build`     | build [Sphinx](https://www.sphinx-doc.org)-based documentation |
+| `make target/clean`     | clean                  the target implementation               |
+| `make target/build`     | build                  the target implementation               |
+| `make target/fetch-dep` | fetch (i.e., download) the target implementation dependencies  |
+| `make target/patch-dep` | patch                  the target implementation dependencies  |
+| `make target/build-dep` | build                  the target implementation dependencies  |
+| `make target/clean-dep` | clean                  the target implementation dependencies  |
+| `make clean`            |  selectively remove artefacts produced by the build system     |
+| `make spotless`         | aggressively remove artefacts produced by the build system     |
 
 with configuration options for it outlined in the following.
 
@@ -64,10 +64,10 @@ image which supports the
 build context for a given board type is built using
 
 - board-agnostic content in 
-  `${FIAT_HOME}/src/docker`,
+  `${FIAT_PATH_REPO}/src/docker`,
   plus
 - board-specific content in 
-  `${FIAT_HOME}/src/target/board/imp/${FIAT_BOARD}/Dockerfile.in`.
+  `${FIAT_PATH_REPO}/src/target/board/imp/${FIAT_BOARD}/Dockerfile.in`.
 
 However, *there is no need to do this manually*: a pre-built image 
 can (and will) be pulled from
@@ -84,12 +84,12 @@ will clean (or remove) and build the image  for *one* board type
 (specified using `${FIAT_BOARD}`)
 
 ```sh
-${FIAT_HOME}/bin/docker.sh clean
-${FIAT_HOME}/bin/docker.sh build
+${FIAT_PATH_REPO}/bin/docker.sh clean
+${FIAT_PATH_REPO}/bin/docker.sh build
 ```
 
 will clean (or remove) and build the images for *all* board types
-(identified by searching for instances of `Dockerfile.in` in `${FIAT_HOME}/src/fiat/target/board/imp`).
+(identified by searching for instances of `Dockerfile.in` in `${FIAT_PATH_REPO}/src/fiat/target/board/imp`).
 
 <!--- -------------------------------------------------------------------- --->
 
@@ -129,7 +129,7 @@ The options are
 
 <!--- -------------------------------------------------------------------- --->
 
-## The `FIAT_KERNEL` and `FIAT_BUILD` environment variables
+## The `FIAT_PATH_BUILD` and `FIAT_PATH_IMP` environment variables
 
 - By default, the 
   [workflow](workflow.md)
@@ -140,19 +140,19 @@ The options are
   resources in the repository simply used to build it.
 
 - The
-  `FIAT_KERNEL`
-  environment variable specifies 
-  where the target implementation is located:
+  `FIAT_PATH_BUILD`
+  environment variable specifies
+  where artefacts produced by the build system will be located:
   by default it is set "in-tree" to equal
-  `${FIAT_HOME}/src/fiat/target/kernel/imp`,
+  `${FIAT_PATH_REPO}/build`,
   but this can be overridden.
 
 - The
-  `FIAT_BUILD`
-  environment variable specifies 
-  where artefacts produced by the build system will be located:
+  `FIAT_PATH_IMP`
+  environment variable specifies
+  where the target implementation is located:
   by default it is set "in-tree" to equal
-  `${FIAT_HOME}/build`,
+  `${FIAT_PATH_REPO}/src/fiat/target/kernel/imp`,
   but this can be overridden.
 
 <!--- ==================================================================== --->

@@ -59,7 +59,7 @@
   
   to configure the environment.
   For example, you should find that the
-  `FIAT_HOME`
+  `FIAT_PATH_REPO`
   environment variable is set appropriately.
 
 <!--- -------------------------------------------------------------------- --->
@@ -69,7 +69,7 @@
 - Edit
 
   ```sh
-  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.conf
+  ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.conf
   ```
 
   to configure the target implementation (and support for it),
@@ -77,8 +77,8 @@
 - Edit
 
   ```sh
-  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.h
-  ${FIAT_HOME}/src/fiat/target/kernel/imp/kernel_imp.c
+  ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.h
+  ${FIAT_PATH_REPO}/src/fiat/target/kernel/imp/kernel_imp.c
   ```
 
   to complete the target implementation itself.
@@ -132,9 +132,9 @@
 
      ```sh
      make target/clean
-     make target/fetch-deps
-     make target/patch-deps
-     make target/build-deps
+     make target/fetch-dep
+     make target/patch-dep
+     make target/build-dep
      make target/build
      ```
 
@@ -158,10 +158,10 @@
   e.g.,
   
   ```sh
-  ${FIAT_HOME}/build/target/${FIAT_BOARD}/target.elf
+  ${FIAT_PATH_REPO}/build/target/${FIAT_BOARD}/target.elf
   ```
 
-  in `${FIAT_HOME}/build/target/${FIAT_BOARD}`.
+  in `${FIAT_PATH_REPO}/build/target/${FIAT_BOARD}`.
   Using the appropriate programming infrastructure, you can program 
   your board with one of them.
 

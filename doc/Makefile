@@ -7,9 +7,9 @@
 # =============================================================================
 
 build :
-	@sphinx-build -M  html ${CURDIR} ${FIAT_BUILD}/doc
+	@sphinx-build -M  html ${CURDIR} ${FIAT_PATH_BUILD}/doc
 
 clean :
-	@sphinx-build -M clean ${CURDIR} ${FIAT_BUILD}/doc
+	@sphinx-build -M clean ${CURDIR} ${FIAT_PATH_BUILD}/doc
 
 # =============================================================================

@@ -8,12 +8,10 @@
 
 # =============================================================================
 
-export FIAT_HOME="${PWD}"
+export FIAT_PATH_REPO="${PWD}"
 
 export FIAT_VERSION_MAJOR="0"
 export FIAT_VERSION_MINOR="1"
 export FIAT_VERSION_PATCH="2"
-
-export FIAT_VERSION="${FIAT_VERSION_MAJOR}.${FIAT_VERSION_MINOR}.${FIAT_VERSION_PATCH}"
 
 # =============================================================================
