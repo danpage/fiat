@@ -9,25 +9,11 @@
 
 // ============================================================================
 
-  #define DECLARE_SPR(x,y,z,...)
-  #define DECLARE_GPR(x,y,z,...)
-  #define DECLARE_CMD(x,y      )
-  #define INCLUDE(x) 
-  #include "kernel.conf"
-  #undef  DECLARE_SPR
-  #undef  DECLARE_GPR
-  #undef  DECLARE_CMD
-  #undef  INCLUDE
-
-#if !defined( PARAM_RND )
-#define PARAM_RND ( 4 )
-#endif
-
   #define DECLARE_SPR(x,y,z,...) byte __ ## x[ y ] = z;
   #define DECLARE_GPR(x,y,z,...) byte __ ## x[ y ] = z;
   #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
-  #include "kernel.conf"
+  #include "fiat.conf"
   #undef  DECLARE_SPR
   #undef  DECLARE_GPR
   #undef  DECLARE_CMD
@@ -38,7 +24,7 @@ kernel_reg_t kernel_spr[] = {
   #define DECLARE_GPR(x,y,z,...)
   #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
-  #include "kernel.conf"
+  #include "fiat.conf"
   #undef  DECLARE_SPR
   #undef  DECLARE_GPR
   #undef  DECLARE_CMD
@@ -51,15 +37,13 @@ kernel_reg_t kernel_gpr[] = {
   #define DECLARE_GPR(x,y,z,...) { .ident =   #x, .data = __ ## x, .size = y, .used = 0, .type = { __VA_ARGS__ } },
   #define DECLARE_CMD(x,y      )
   #define INCLUDE(x) 
-  #include "kernel.conf"
+  #include "fiat.conf"
   #undef  DECLARE_SPR
   #undef  DECLARE_GPR
   #undef  DECLARE_CMD
   #undef  INCLUDE
                                  { .ident = NULL, .data =    NULL, .size = 0, .used = 0, .type = {}              }
 };
-
-#undef  PARAM_RND
 
 // ----------------------------------------------------------------------------
 
@@ -104,6 +88,42 @@ kernel_reg_t* kernel_reg_byindex( int   index ) {
   }
 
   return NULL;
+}
+
+// ----------------------------------------------------------------------------
+
+/** Provide a "weak", empty default version of major kernel prologue,
+  * e.g., allowing a light-weight kernel implementation to omit it.
+  */
+
+ret_t __attribute__((weak)) kernel_prologue_major( int op, kernel_reg_t* spr, kernel_reg_t* gpr ) {
+  return EXIT_SUCCESS;
+}
+
+/** Provide a "weak", empty default version of major kernel epilogue,
+  * e.g., allowing a light-weight kernel implementation to omit it.
+  */
+
+ret_t __attribute__((weak)) kernel_epilogue_major( int op, kernel_reg_t* spr, kernel_reg_t* gpr ) {
+  return EXIT_SUCCESS;
+}
+
+// ----------------------------------------------------------------------------
+
+/** Provide a "weak", empty default version of minor kernel prologue,
+  * e.g., allowing a light-weight kernel implementation to omit it.
+  */
+
+void  __attribute__((weak)) kernel_prologue_minor( int op, kernel_reg_t* spr, kernel_reg_t* gpr ) {
+
+}
+
+/** Provide a "weak", empty default version of minor kernel epilogue,
+  * e.g., allowing a light-weight kernel implementation to omit it.
+  */
+
+void  __attribute__((weak)) kernel_epilogue_minor( int op, kernel_reg_t* spr, kernel_reg_t* gpr ) {
+
 }
 
 // ============================================================================
