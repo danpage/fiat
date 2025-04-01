@@ -207,102 +207,119 @@ The following notation is used to specify a given protocol:
   4. a variable-length unsigned integer `vint` (or [varint](https://en.wikipedia.org/wiki/Variable-length_quantity), which is itself a `byte` sequence,
   
 - `<T:X>` denotes a field `X` of type `T`, 
-- `[T:X]^n` denotes a field `X` which is a sequence whose `i`-th element `X[i]` is of type `T`, 
-- if a field has a fixed value `Y`, it is specified as `<T:X>=Y`.
+- `[T:X^n]` denotes a field `X` which is an `n`-element sequence whose `i`-th element `X[i]` is of type `T`, 
+- if a field has a fixed value `Y`, it is specified, e.g., as `<T:X>=Y`.
 - `||` denotes concatenation.
+- `{X}` denotes optionality, e.g., that `X` may or may not form part of a message depending on some configuration.
 
 ### The `binary` driver
 
 This driver implementation uses a 
 [binary](https://en.wikipedia.org/wiki/Binary_protocol)
-protocol, which prioritises efficiency.
+protocol:
+the focus is on
+machine-friendly, programmatic
+interaction, which e.g., emphasises efficiency in support of   "bulk" target implementation use-cases.
+
 Communication is
 stream-based,
 with request and acknowledge messages are represented using a
 sequence of raw bytes.
+Note that 
+the `binary` driver
+includes a
+[CRC](https://en.wikipedia.org/wiki/Cyclic_redundancy_check)-based
+checksum with every message (computed over all preceding, non-CRC content):
+this contrast with
+the `text`   driver,
+which does not.
 Based on this, the following command set is supported:
 
 - Ping.
-  - `req` syntax: `<byte:req>='!'`
+  - `req` syntax: `<byte:req>='!' || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
 
 - Reset.
-  - `req` syntax: `<byte:req>='*'`
+  - `req` syntax: `<byte:req>='*' || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
 
 - Query version.
-  - `req` syntax: `<byte:req>='$'`
+  - `req` syntax: `<byte:req>='$' || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <byte:patch> || <byte:minor> || <byte:major>`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:patch> || <byte:minor> || <byte:major> || <byte:crc^2>`
 
-- Query     identifier, or "`nameof`" a register.
-  - `req` syntax: `<byte:req>='"' || <byte:index>`
+- Query     identifier of, or "`nameof`" a register.
+  - `req` syntax: `<byte:req>='"' || <byte:index> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <vint:size> || [byte:data]^size`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <vint:size> || [byte:data^size] || <byte:crc^2>`
 
-- Query allocated size, or "`sizeof`" a register (measured in bytes).
-  - `req` syntax: `<byte:req>='|' || <byte:index>`
+- Query allocated size of, or "`sizeof`" a register (measured in bytes).
+  - `req` syntax: `<byte:req>='|' || <byte:index> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <vint:size>`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <vint:size> || <byte:crc^2>`
 
-- Query used      size, or "`usedof`" a register (measured in bytes).
-  - `req` syntax: `<byte:req>='#' || <byte:index>`
+- Query used      size of, or "`usedof`" a register (measured in bytes).
+  - `req` syntax: `<byte:req>='#' || <byte:index> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <vint:size>`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <vint:size> || <byte:crc^2>`
 
-- Query           type, or "`typeof`" a register.
-  - `req` syntax: `<byte:req>='?' || <byte:index>`
+- Query           type of, or "`typeof`" a register.
+  - `req` syntax: `<byte:req>='?' || <byte:index> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <byte:type>`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:type> || <byte:crc^2>`
 
 - Transfer content (i.e., write) into a register.
-  - `req` syntax: `<byte:req>='>' || <byte:index> || <vint:size> || [byte:data]^size`
+  - `req` syntax: `<byte:req>='>' || <byte:index> || <vint:size> || [byte:data^size] || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
 
 - Transfer content (i.e.,  read) from a register.
-  - `req` syntax: `<byte:req>='<' || <byte:index>`
+  - `req` syntax: `<byte:req>='<' || <byte:index> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+' || <vint:size> || [byte:data]^size`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <vint:size> || [byte:data^size] || <byte:crc^2>`
 
 - Execute the kernel.
-  - `req` syntax: `<byte:req>='=' || <byte:op> || <vint:rep>`
+  - `req` syntax: `<byte:req>='=' || <byte:op> || <vint:rep> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
   - note: `op` is an operation identifier passed to the implementation, and `rep` is a repeat count
 
 - Execute the kernel prologue (or "major" initialisation).
-  - `req` syntax: `<byte:req>='[' || <byte:op>`
+  - `req` syntax: `<byte:req>='[' || <byte:op> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
   - note: `op` is an operation identifier passed to the implementation
 
 - Execute the kernel epilogue (or "major"   finalisation).
-  - `req` syntax: `<byte:req>=']' || <byte:op>`
+  - `req` syntax: `<byte:req>=']' || <byte:op> || <byte:crc^2>`
   - `ack` syntax: 
-    - on failure, `<byte:ack>='-'` 
-    - on success, `<byte:ack>='+'`
+    - on failure, `<byte:ack>='-' || <byte:err> || <byte:crc^2>`
+    - on success, `<byte:ack>='+' || <byte:crc^2>`
   - note: `op` is an operation identifier passed to the implementation
 
 ### The `text`   driver
 
 This driver implementation uses a 
 [text](https://en.wikipedia.org/wiki/Text-based_protocol)
-protocol, which prioritises simplicity (and maybe usability therefore):
-in concept at least, it is *similar* to the ChipWhisperer 
+protocol:
+the focus is on
+  human-friendly
+interaction, which e.g., emphasises  usability in support of "ad-hoc" target implementation use-cases such as debugging.
+
+In concept at least, it is *similar* to the ChipWhisperer 
 [SimpleSerial](https://chipwhisperer.readthedocs.io/en/latest/simpleserial.html) 
 protocol.
 Communication is
@@ -319,73 +336,73 @@ Based on this, the following command set is supported:
 - Ping.
   - `req` syntax: `<char:req>='!'`
   - `ack` syntax: 
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 - Reset.
   - `req` syntax: `<char:req>='*'`
   - `ack` syntax: 
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 - Query version.
   - `req` syntax: `<char:req>='$'`
   - `ack` syntax: 
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+' <byte:patch> <byte:minor> <byte:major>`
 
-- Query     identifier, or "`nameof`" a register.
+- Query     identifier of, or "`nameof`" a register.
   - `req` syntax: `<char:req>='"' <byte:index>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
-    - on success, `<char:ack>='+' <vint:size> [byte:data]^size`
+    - on failure, `<char:ack>='-' <byte:err>`
+    - on success, `<char:ack>='+' <vint:size> [byte:data^size]`
 
-- Query allocated size, or "`sizeof`" a register (measured in bytes).
+- Query allocated size of, or "`sizeof`" a register (measured in bytes).
   - `req` syntax: `<char:req>='|' <byte:index>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+' <vint:size>`
 
-- Query used      size, or "`usedof`" a register (measured in bytes).
+- Query used      size of, or "`usedof`" a register (measured in bytes).
   - `req` syntax: `<char:req>='#' <byte:index>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+' <vint:size>`
 
-- Query           type, or "`typeof`" a register.
+- Query           type of, or "`typeof`" a register.
   - `req` syntax: `<char:req>='?' <byte:index>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+' <byte:type>`
 
 - Transfer content (i.e., write) into a register.
-  - `req` syntax: `<char:req>='>' <byte:index> <vint:size> [byte:data]^size`
+  - `req` syntax: `<char:req>='>' <byte:index> <vint:size> [byte:data^size]`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 - Transfer content (i.e.,  read) from a register.
   - `req` syntax: `<char:req>='<' <byte:index>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
-    - on success, `<char:ack>='+' <vint:size> [byte:data]^size`
+    - on failure, `<char:ack>='-' <byte:err>`
+    - on success, `<char:ack>='+' <vint:size> [byte:data^size]`
 
 - Execute the kernel.
   - `req` syntax: `<char:req>='=' <byte:op> <vint:rep>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 - Execute the kernel prologue (or "major" initialisation).
   - `req` syntax: `<char:req>='[' <byte:op>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 - Execute the kernel epilogue (or "major"   finalisation).
   - `req` syntax: `<char:req>=']' <byte:op>`
   - `ack` syntax:
-    - on failure, `<char:ack>='-'`
+    - on failure, `<char:ack>='-' <byte:err>`
     - on success, `<char:ack>='+'`
 
 <!--- -------------------------------------------------------------------- --->
