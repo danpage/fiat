@@ -144,7 +144,7 @@ a high-level overview of the
 [workflow](https://fiat.readthedocs.io/en/latest/workflow.html)
 involved,
 plus
-a low(er)-level 
+a low(er)-level worked
 [example](https://fiat.readthedocs.io/en/latest/example.html)
 of applying said workflow to capture a 
 [block cipher](https://en.wikipedia.org/wiki/Block_cipher)
