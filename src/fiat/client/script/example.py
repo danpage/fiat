@@ -4,54 +4,28 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
-import argparse, libfiat.client, random, sys
+import argparse, libfiat, random, sys
 
 GPR_C = 0x00
 GPR_K = 0x01
 GPR_M = 0x02
 
 if ( __name__ == '__main__' ) :
-  parser = argparse.ArgumentParser( add_help = False )
-
-  parser.add_argument( '--device', action = 'store', choices = [ 'socket', 'serial' ], default = 'socket' )
-  parser.add_argument( '--driver', action = 'store', choices = [ 'binary', 'text'   ], default = 'binary' )
-
-  parser.add_argument( '--seed',   action = 'store', default = None  )
-
-  parser.add_argument( '--host',   action = 'store', default = None  )
-  parser.add_argument( '--port',   action = 'store', default = None  )
-
-  parser.add_argument( '--baud',   action = 'store', default = 38400 )
-
-  argv = parser.parse_args() ; random.seed( int( argv.seed ) )
-
-  if   ( argv.device == 'serial' ) :
-    client = libfiat.client.ClientImpSerial( driver = argv.driver ) ; client.open(               ( argv.port ), baudrate = argv.baud )
-  elif ( argv.device == 'socket' ) :
-    client = libfiat.client.ClientImpSocket( driver = argv.driver ) ; client.open( argv.host, int( argv.port ),                      )
+  client = libfiat.open( sys.argv ) ; random.seed( 0 )
 
   ( ack,   ) = client.reset()
 
-  ( ack, x ) = client.nameof( GPR_C )
-  print( 'nameof( GPR_C ) = {0:s}'.format( x ) )  
-  ( ack, x ) = client.nameof( GPR_K )
-  print( 'nameof( GPR_K ) = {0:s}'.format( x ) )  
-  ( ack, x ) = client.nameof( GPR_M )
-  print( 'nameof( GPR_M ) = {0:s}'.format( x ) )  
+  for index in [ GPR_C, GPR_K, GPR_M ] :
+    ( ack, nameof ) = client.nameof( index )
+    print( 'nameof( 0x{0:02X} ) = {1:s}'.format( index, nameof ) )  
 
-  ( ack, x ) = client.sizeof( GPR_C )
-  print( 'sizeof( GPR_C ) = {0:d}'.format( x ) )
-  ( ack, x ) = client.sizeof( GPR_K )
-  print( 'sizeof( GPR_K ) = {0:d}'.format( x ) )
-  ( ack, x ) = client.sizeof( GPR_M )
-  print( 'sizeof( GPR_M ) = {0:d}'.format( x ) )
+  for index in [ GPR_C, GPR_K, GPR_M ] :
+    ( ack, sizeof ) = client.sizeof( index )
+    print( 'sizeof( 0x{0:02X} ) = {1:d}'.format( index, sizeof ) )
 
-  ( ack, x ) = client.typeof( GPR_C )
-  print( 'typeof( GPR_C ) = {0:02X} => wr={1:d}, rd={2:d}, length={3:d}'.format( x, x.wr(), x.rd(), x.length() ) )
-  ( ack, x ) = client.typeof( GPR_K )
-  print( 'typeof( GPR_K ) = {0:02X} => wr={1:d}, rd={2:d}, length={3:d}'.format( x, x.wr(), x.rd(), x.length() ) )
-  ( ack, x ) = client.typeof( GPR_M )
-  print( 'typeof( GPR_M ) = {0:02X} => wr={1:d}, rd={2:d}, length={3:d}'.format( x, x.wr(), x.rd(), x.length() ) )
+  for index in [ GPR_C, GPR_K, GPR_M ] :
+    ( ack, typeof ) = client.typeof( index )
+    print( 'typeof( 0x{0:02X} ) = 0x{1:02X} => wr={2:d}, rd={3:d}, length={4:d}'.format( index, typeof, typeof.wr(), typeof.rd(), typeof.length() ) )
 
   k = random.randbytes( 16 )
   m = random.randbytes( 16 )
