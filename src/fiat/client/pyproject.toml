@@ -30,7 +30,7 @@ keywords = []
 maintainers = [ { name = 'Daniel Page', email = 'dan@phoo.org' } ]
 
 dependencies = [
-  'pyserial'
+  'crc', 'pyserial'
 ]
 requires-python = '>= 3.8'
 classifiers = [
