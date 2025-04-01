@@ -59,4 +59,22 @@ char* strext( char* r, char* x ) {
   }
 }
 
+crc_t crc( crc_t crc, void* x, int n ) {
+  uint8_t* __x = ( uint8_t* )( x );
+
+  if( __x == NULL ) {
+    return 0;
+  }
+
+  for( int i = 0; i < n; i++ ) {
+    crc ^= __x[ i ];
+
+    for( int j = 0; j < BITSOF( uint8_t ); j++ ) {
+      crc = ( crc & 1 ) ? ( ( crc >> 1 ) ^ 0x8408 ) : ( crc >> 1 );
+    }
+  }
+
+  return crc;
+}
+
 // ============================================================================

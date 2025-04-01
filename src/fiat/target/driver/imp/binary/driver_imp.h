@@ -12,10 +12,23 @@
 
 // ============================================================================
 
-#define DRIVER_CMD(x,...) void x( driver_ctx_t* ctx ) { __VA_ARGS__; return; }
+#define DRIVER_CMD(x,...) void x( driver_ctx_t* ctx ) { __VA_ARGS__; }
+
+#define DRIVER_ERR(x) {               \
+  driver_byte_wr( ctx, ACK_FAILURE ); \
+  driver_byte_wr( ctx, x           ); \
+  driver_crc_wr( ctx, ctx->crc_wr );  \
+}
+
+#define DRIVER_CRC {                          \
+  if( driver_crc_rd( ctx ) != ctx->crc_rd ) { \
+    DRIVER_ERR( ERR_CRC );                    \
+  }                                           \
+}
 
 typedef struct {
-
+  crc_t crc_rd;
+  crc_t crc_wr;
 } driver_ctx_t;
 
 #define DECLARE_SPR(x,y,z,...)

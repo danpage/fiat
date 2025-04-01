@@ -14,7 +14,7 @@ from libfiat import util
 class Req( enum.IntEnum ) :
   """ An enumeration 
       that captures
-      request     message tags (or identifiers).
+      communicated request         tags (or identifiers).
   """
 
   PING            = ord( '!' )
@@ -36,11 +36,24 @@ class Req( enum.IntEnum ) :
 class Ack( enum.IntEnum ) :
   """ An enumeration 
       that captures
-      acknowledge message tags (or identifiers).
+      communicated acknowledgement tags (or identifiers).
   """
 
   SUCCESS         = ord( '+' )
   FAILURE         = ord( '-' )
+
+class Err( enum.IntEnum ) :
+  """ An enumeration 
+      that captures
+      communicated error           tags (or identifiers).
+  """
+
+  COMMAND         = 0x00
+  FORMAT          = 0x01
+  PERMISSION      = 0x02
+  INDEX           = 0x03
+  SIZE            = 0x04
+  CRC             = 0x05
 
 class  Type( int ) :
   """ A "rich" type

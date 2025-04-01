@@ -1,4 +1,5 @@
 clang==14.0
+crc
 hatch
 hawkmoth
 myst-parser

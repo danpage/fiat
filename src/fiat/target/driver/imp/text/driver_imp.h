@@ -17,6 +17,12 @@
 
 #define DRIVER_CMD(x,...) void x( driver_ctx_t* ctx ) { __VA_ARGS__; return; }
 
+#define DRIVER_ERR(x) {            \
+  p = strext( p, "-" );            \
+  p = strext( p, " " );            \
+  p = driver_byte_wr( ctx, p, x ); \
+}
+
 typedef struct {
   char       req[ DRIVER_MAX_LINE  ];
   char       ack[ DRIVER_MAX_LINE  ];

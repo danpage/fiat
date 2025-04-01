@@ -56,6 +56,20 @@ typedef enum {
   ACK_FAILURE         = '-'
 } ack_t;
 
+/** An enumeration 
+  * that captures
+  * communicated error           tags.
+  */
+
+typedef enum {
+  ERR_COMMAND         = 0x00,
+  ERR_FORMAT          = 0x01,
+  ERR_PERMISSION      = 0x02,
+  ERR_INDEX           = 0x03,
+  ERR_SIZE            = 0x04,
+  ERR_CRC             = 0x05
+} err_t;
+
 typedef uint8_t byte;
 
 /** An enumeration 
@@ -69,6 +83,14 @@ typedef enum {
 
 /** shared
   */
+
+/** A type 
+  * that captures
+  * Cyclic Redundancy Check (CRC)
+  * values.
+  */
+
+typedef uint16_t crc_t;
 
 /** A type 
   * that captures
@@ -94,6 +116,8 @@ extern int  hextoint( char x );
 extern char inttohex( int  x );
 
 extern char* strext( char* r, char* x );
+
+extern crc_t crc( crc_t crc, void* x, int n );
 
 // ============================================================================
 
