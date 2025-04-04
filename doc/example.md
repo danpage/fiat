@@ -113,8 +113,8 @@ whose core functionality is captured by the following fragment:
 .. literalinclude:: ../src/fiat/client/script/example.py
    :language: Python
    :linenos:
-   :lines: 7-43
-   :lineno-start: 7
+   :lines: 17-47
+   :lineno-start: 17
 ```
 
 Note that each line which issues a request does not, but ideally would
@@ -122,33 +122,33 @@ check the associated acknowledgement: execution simply continues under
 the assumption that each acknowledgement indicates success.
 A line-by-line overview reads as follows:
 
-- line  14
+- line  18
    opens the client (or connection),
-- line  16
+- line  20
   issues a           `reset`  request,
-- lines 18 to  20
+- lines 22 to  24
   issue  a series of `nameof` requests
   to query the identifier     of `c`, `k`, and `m` registers,
-- lines 22 to  24
+- lines 26 to  28
   issue  a series of `sizeof` requests
   to query the allocated size of `c`, `k`, and `m` registers,
-- lines 26 to 28
+- lines 30 to 32
   issue  a series of `typeof` requests
   to query the           type of `c`, `k`, and `m` registers (including, e.g., the read- and write-access),
-- lines 30 and 31
+- lines 34 and 35
   generate random, 16-byte values for `k` and `m`,
-- lines 33 and 34
+- lines 37 and 38
   issue  a series of `wr`     requests
   to write (i.e., transfer from client to target) `k` and `m`,
-- line  36
+- line  40
   issues a           `kernel` request
   to invoke the kernel function which computes `c` from `k` and `m`,
-- line  38
+- line  42
   issues a           `rd`     request
   to read  (i.e., transfer from client to target)         `c`,
-- lines 40 and 41
+- lines 44 and 45
   print each byte of `c` and `k ^ m` to check whether the value read matches that expected,
-- line  43
+- line  47
   closes the client (or connection).
 
 Now we can execute the target and client, and interaction between them:
@@ -199,32 +199,9 @@ Now we can execute the target and client, and interaction between them:
 
 Using either driver, we expect an output similar to
 
-```sh
-nameof( 0x00 ) = c
-nameof( 0x01 ) = k
-nameof( 0x02 ) = m
-sizeof( 0x00 ) = 16
-sizeof( 0x01 ) = 16
-sizeof( 0x02 ) = 16
-typeof( 0x00 ) = 0x02 => wr=0, rd=1, length=0
-typeof( 0x01 ) = 0x01 => wr=1, rd=0, length=0
-typeof( 0x02 ) = 0x01 => wr=1, rd=0, length=0
-i =  0 : c[i] = 0x98, k[i] ^ m[i] = 0x98
-i =  1 : c[i] = 0x93, k[i] ^ m[i] = 0x93
-i =  2 : c[i] = 0x86, k[i] ^ m[i] = 0x86
-i =  3 : c[i] = 0xB3, k[i] ^ m[i] = 0xB3
-i =  4 : c[i] = 0x8A, k[i] ^ m[i] = 0x8A
-i =  5 : c[i] = 0x40, k[i] ^ m[i] = 0x40
-i =  6 : c[i] = 0xC2, k[i] ^ m[i] = 0xC2
-i =  7 : c[i] = 0x68, k[i] ^ m[i] = 0x68
-i =  8 : c[i] = 0x96, k[i] ^ m[i] = 0x96
-i =  9 : c[i] = 0x12, k[i] ^ m[i] = 0x12
-i = 10 : c[i] = 0x41, k[i] ^ m[i] = 0x41
-i = 11 : c[i] = 0x80, k[i] ^ m[i] = 0x80
-i = 12 : c[i] = 0x78, k[i] ^ m[i] = 0x78
-i = 13 : c[i] = 0xB2, k[i] ^ m[i] = 0xB2
-i = 14 : c[i] = 0xCF, k[i] ^ m[i] = 0xCF
-i = 15 : c[i] = 0x14, k[i] ^ m[i] = 0x14
+```{eval-rst}
+.. literalinclude:: ../src/fiat/client/script/example.out
+   :linenos:
 ```
 
 noting that despite use of
@@ -242,16 +219,18 @@ we compute locally: this demonstrates it is operating as expected.
   `${FIAT_PATH_REPO}/build/target/native/target.ncat`
   reads as follows:
 
-  ```
-
+  ```{eval-rst}
+  .. literalinclude:: ../src/fiat/client/script/example.ncat_binary
+     :linenos:
   ```
 
 - From use of the `text`   driver,
   `${FIAT_PATH_REPO}/build/target/native/target.ncat`
   reads as follows:
 
-  ```
-
+  ```{eval-rst}
+  .. literalinclude:: ../src/fiat/client/script/example.ncat_binary
+     :linenos:
   ```
 
 <!--- ==================================================================== --->

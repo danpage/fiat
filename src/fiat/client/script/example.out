@@ -1,0 +1,25 @@
+nameof( 0x00 ) = c
+nameof( 0x01 ) = k
+nameof( 0x02 ) = m
+sizeof( 0x00 ) = 16
+sizeof( 0x01 ) = 16
+sizeof( 0x02 ) = 16
+typeof( 0x00 ) = 0x02 => wr=0, rd=1, length=0
+typeof( 0x01 ) = 0x01 => wr=1, rd=0, length=0
+typeof( 0x02 ) = 0x01 => wr=1, rd=0, length=0
+i =  0 : c[i] = 0x98, k[i] ^ m[i] = 0x98
+i =  1 : c[i] = 0x93, k[i] ^ m[i] = 0x93
+i =  2 : c[i] = 0x86, k[i] ^ m[i] = 0x86
+i =  3 : c[i] = 0xB3, k[i] ^ m[i] = 0xB3
+i =  4 : c[i] = 0x8A, k[i] ^ m[i] = 0x8A
+i =  5 : c[i] = 0x40, k[i] ^ m[i] = 0x40
+i =  6 : c[i] = 0xC2, k[i] ^ m[i] = 0xC2
+i =  7 : c[i] = 0x68, k[i] ^ m[i] = 0x68
+i =  8 : c[i] = 0x96, k[i] ^ m[i] = 0x96
+i =  9 : c[i] = 0x12, k[i] ^ m[i] = 0x12
+i = 10 : c[i] = 0x41, k[i] ^ m[i] = 0x41
+i = 11 : c[i] = 0x80, k[i] ^ m[i] = 0x80
+i = 12 : c[i] = 0x78, k[i] ^ m[i] = 0x78
+i = 13 : c[i] = 0xB2, k[i] ^ m[i] = 0xB2
+i = 14 : c[i] = 0xCF, k[i] ^ m[i] = 0xCF
+i = 15 : c[i] = 0x14, k[i] ^ m[i] = 0x14
