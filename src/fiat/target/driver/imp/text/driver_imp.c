@@ -100,7 +100,7 @@ DRIVER_CMD(driver_cmd_ping,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 1 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   p = strext( p, "+" );
@@ -110,7 +110,7 @@ DRIVER_CMD(driver_cmd_reset,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 1 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   driver_do_reset();
@@ -122,7 +122,7 @@ DRIVER_CMD(driver_cmd_version,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 1 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   p = strext( p, "+" );
@@ -138,13 +138,13 @@ DRIVER_CMD(driver_cmd_nameof,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
 
   int size = strlen( spec->ident );
@@ -163,13 +163,13 @@ DRIVER_CMD(driver_cmd_sizeof,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
 
     p = strext( p, "+" );
@@ -181,13 +181,13 @@ DRIVER_CMD(driver_cmd_usedof,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
 
     p = strext( p, "+" );
@@ -199,13 +199,13 @@ DRIVER_CMD(driver_cmd_typeof,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
 
     p = strext( p, "+" );
@@ -217,25 +217,25 @@ DRIVER_CMD(driver_cmd_wr,{
   char* p = ctx->ack; int size;
 
   if( ctx->tok_len != 4 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
   if( !spec->type.wr ) {
-    DRIVER_ERR( ERR_PERMISSION );
+    DRIVER_ERR( ERR_PERMISSION ); return;
   }
 
   size = driver_byte_rd( ctx, ctx->tok_ptr[ 2 ] );
 
   if( ( spec->type.length == KERNEL_REG_LENGTH_FIX ) && ( size != spec->size ) ) {
-    DRIVER_ERR( ERR_SIZE       );
+    DRIVER_ERR( ERR_SIZE       ); return;
   }
   if(                                                   ( size >  spec->size ) ) {
-    DRIVER_ERR( ERR_SIZE       );
+    DRIVER_ERR( ERR_SIZE       ); return;
   }
 
   for( int i = 0; i < size; i++ ) {
@@ -249,16 +249,16 @@ DRIVER_CMD(driver_cmd_rd,{
   char* p = ctx->ack; int size;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   kernel_reg_t* spec = NULL;
 
   if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+    DRIVER_ERR( ERR_INDEX      ); return;
   }
   if( !spec->type.rd ) {
-    DRIVER_ERR( ERR_PERMISSION );
+    DRIVER_ERR( ERR_PERMISSION ); return;
   }
 
   if( spec->type.length == KERNEL_REG_LENGTH_FIX ) {
@@ -284,7 +284,7 @@ DRIVER_CMD(driver_cmd_kernel,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 3 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   int op = driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] ), rep = driver_vint_rd( ctx, ctx->tok_ptr[ 2 ] );
@@ -298,7 +298,7 @@ DRIVER_CMD(driver_cmd_kernel_prologue,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   int op = driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] );
@@ -312,7 +312,7 @@ DRIVER_CMD(driver_cmd_kernel_epilogue,{
   char* p = ctx->ack;
 
   if( ctx->tok_len != 2 ) {
-    DRIVER_ERR( ERR_FORMAT     );
+    DRIVER_ERR( ERR_FORMAT     ); return;
   }
 
   int op = driver_byte_rd( ctx, ctx->tok_ptr[ 1 ] );
@@ -366,8 +366,7 @@ void driver_interact() {
       default : {
         char* p = ctx->ack;
 
-        DRIVER_ERR( ERR_COMMAND );
-        break;
+        DRIVER_ERR( ERR_COMMAND ); break;
       }
     }
   }

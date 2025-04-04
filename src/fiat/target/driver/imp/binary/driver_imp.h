@@ -14,7 +14,11 @@
 
 #define DRIVER_CMD(x,...) void x( driver_ctx_t* ctx ) { __VA_ARGS__; }
 
-#define DRIVER_ERR(x) {               \
+#define DRIVER_ERR(x,n) {             \
+  for( int i = 0; i < n; i++ ) {      \
+    driver_byte_rd( ctx );            \
+  }                                   \
+                                      \
   driver_byte_wr( ctx, ACK_FAILURE ); \
   driver_byte_wr( ctx, x           ); \
   driver_crc_wr( ctx, ctx->crc_wr );  \
@@ -22,7 +26,7 @@
 
 #define DRIVER_CRC {                          \
   if( driver_crc_rd( ctx ) != ctx->crc_rd ) { \
-    DRIVER_ERR( ERR_CRC );                    \
+    DRIVER_ERR( ERR_CRC, 0 ); return;         \
   }                                           \
 }
 

@@ -99,13 +99,13 @@ DRIVER_CMD(driver_cmd_version,{
 });
 
 DRIVER_CMD(driver_cmd_nameof,{
-  kernel_reg_t* spec = NULL;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx ), size;
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t )        ); return;
   }
 
-  int size = strlen( spec->ident );
+  size = strlen( spec->ident );
 
   DRIVER_CRC;
 
@@ -119,10 +119,10 @@ DRIVER_CMD(driver_cmd_nameof,{
 });
 
 DRIVER_CMD(driver_cmd_sizeof,{
-  kernel_reg_t* spec = NULL;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx );
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t )        ); return;
   }
 
   DRIVER_CRC;
@@ -132,10 +132,10 @@ DRIVER_CMD(driver_cmd_sizeof,{
 });
 
 DRIVER_CMD(driver_cmd_usedof,{
-  kernel_reg_t* spec = NULL;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx );
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t )        ); return;
   }
 
   DRIVER_CRC;
@@ -145,10 +145,10 @@ DRIVER_CMD(driver_cmd_usedof,{
 });
 
 DRIVER_CMD(driver_cmd_typeof,{
-  kernel_reg_t* spec = NULL;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx );
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t )        ); return;
   }
 
   DRIVER_CRC;
@@ -158,22 +158,20 @@ DRIVER_CMD(driver_cmd_typeof,{
 });
 
 DRIVER_CMD(driver_cmd_wr,{
-  kernel_reg_t* spec = NULL; int size;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx ), size = driver_vint_rd( ctx );
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t ) + size ); return;
   }
   if( !spec->type.wr ) {
-    DRIVER_ERR( ERR_PERMISSION );
+    DRIVER_ERR( ERR_PERMISSION, SIZEOF( crc_t ) + size ); return;
   }
-
-  size = driver_vint_rd( ctx );
 
   if( ( spec->type.length == KERNEL_REG_LENGTH_FIX ) && ( size != spec->size ) ) {
-    DRIVER_ERR( ERR_SIZE       );
+    DRIVER_ERR( ERR_SIZE,       SIZEOF( crc_t ) + size ); return;
   }
   if(                                                   ( size >  spec->size ) ) {
-    DRIVER_ERR( ERR_SIZE       );
+    DRIVER_ERR( ERR_SIZE,       SIZEOF( crc_t ) + size ); return;
   }
 
   for( int i = 0; i < size; i++ ) {
@@ -187,13 +185,13 @@ DRIVER_CMD(driver_cmd_wr,{
 });
 
 DRIVER_CMD(driver_cmd_rd,{
-  kernel_reg_t* spec = NULL; int size;
+  kernel_reg_t* spec = NULL; int index = driver_byte_rd( ctx ), size;
 
-  if( ( spec = kernel_reg_byindex( driver_byte_rd( ctx ) ) ) == NULL ) {
-    DRIVER_ERR( ERR_INDEX      );
+  if( ( spec = kernel_reg_byindex( index ) ) == NULL ) {
+    DRIVER_ERR( ERR_INDEX,      SIZEOF( crc_t )        ); return;
   }
   if( !spec->type.rd ) {
-    DRIVER_ERR( ERR_PERMISSION );
+    DRIVER_ERR( ERR_PERMISSION, SIZEOF( crc_t )        ); return;
   }
 
   if( spec->type.length == KERNEL_REG_LENGTH_FIX ) {
@@ -269,8 +267,7 @@ void driver_interact() {
     #undef  INCLUDE
 
     default : {
-      DRIVER_ERR( ERR_COMMAND );
-      break;
+      DRIVER_ERR( ERR_COMMAND, 0 ); break;
     }
   }
 
