@@ -4,11 +4,15 @@
 # can be found via https://opensource.org/license/mit (and which is included 
 # as LICENSE.txt within the associated archive or repository).
 
-import argparse, libfiat, random, sys
+import argparse, libfiat, logging, random, sys
+
+# =============================================================================
 
 GPR_C = 0x00
 GPR_K = 0x01
 GPR_M = 0x02
+
+# -----------------------------------------------------------------------------
 
 if ( __name__ == '__main__' ) :
   client = libfiat.open( sys.argv ) ; random.seed( 0 )
@@ -42,3 +46,4 @@ if ( __name__ == '__main__' ) :
 
   client.close()
 
+# =============================================================================
